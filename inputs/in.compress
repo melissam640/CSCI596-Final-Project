@@ -1,0 +1,40 @@
+# Tobermorite-11A pillar: uniaxial compression along z at 1%/ps, 10 K, from thermal.restart
+
+variable ffield index /home1/mm18756/tobermolite/info/ffield-CaSiOH-lammps.reax.txt
+variable T      index 10.0
+variable ncomp  index 120000      # 30 ps -> 30% strain
+variable erate  index -1.0e-5     # 1/fs  (= -1%/ps, engineering)
+variable R0     index 20.35       # bulk-density equivalent radius (A) for stress normalization
+variable ndump  index 400         # 400 x 0.25 fs = 100 fs
+
+read_restart    thermal.restart
+pair_style      reaxff NULL checkqeq yes safezone 3.0 mincap 150
+pair_coeff      * * ${ffield} Ca Si O H
+fix             qeq all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+timestep        0.25
+
+# cylindrical pillar leaves the corner ranks of the 4x4 xy grid near-empty; shift cuts in xy
+balance         1.1 shift xy 20 1.05
+
+variable        L0 equal $(lz)
+variable        strain equal (v_L0-lz)/v_L0
+variable        scomp equal pzz*lx*ly/(PI*v_R0^2)*1.01325e-4
+thermo_style    custom step time temp pe etotal lx ly lz v_strain pzz v_scomp
+thermo_modify   flush yes
+thermo          40
+
+reset_timestep  0
+dump            xyz all xyz ${ndump} traj_compress.xyz
+dump_modify     xyz element Ca Si O H
+dump            cus all custom ${ndump} traj_compress.lammpstrj id type element x y z q
+dump_modify     cus element Ca Si O H sort id
+fix             spec all reaxff/species 400 1 400 species.out
+fix             mom all momentum 100 linear 1 1 1 angular
+fix             nvt all nvt temp ${T} ${T} 100.0
+fix             def all deform 1 z erate ${erate} remap x
+fix             bal all balance 1000 1.1 shift xy 20 1.05
+run             ${ncomp}
+write_restart   compressed.restart
+write_data      compressed.data

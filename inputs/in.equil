@@ -1,0 +1,56 @@
+# Tobermorite-11A pillar (axis = crystal c = z): relaxation + thermalization at 10 K
+# Produces relaxed.data, thermal.restart, traj_thermal.xyz.  Follow with in.compress.
+
+variable ffield index /home1/mm18756/tobermolite/info/ffield-CaSiOH-lammps.reax.txt
+variable T      index 10.0
+variable seed   index 482911
+variable nmin1  index 5000        # CG iterations, atoms only (fixed box; Lz relaxed later by NPT)
+variable nber   index 20000       # 5 ps Berendsen T at fixed box (drains relaxation heat)
+variable nnpt   index 40000       # 10 ps Nose-Hoover NPT(z)
+variable nnvt   index 20000       # 5 ps Nose-Hoover NVT
+variable R0     index 20.35       # bulk-density equivalent radius (A) for stress normalization
+variable ndump  index 400         # 400 x 0.25 fs = 100 fs
+
+units           real
+atom_style      charge
+boundary        s s p
+read_data       pillar.data
+
+pair_style      reaxff NULL checkqeq yes safezone 3.0 mincap 150
+pair_coeff      * * ${ffield} Ca Si O H
+fix             qeq all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+# engineering axial stress (GPa, compression positive) = total virial_zz / (Lz * pi R0^2)
+variable        scomp equal pzz*lx*ly/(PI*v_R0^2)*1.01325e-4
+thermo_style    custom step time temp pe etotal lx ly lz pzz v_scomp
+thermo_modify   flush yes
+
+# ---------------- Stage 1: structural relaxation ----------------
+thermo          50
+min_style       cg
+minimize        1.0e-10 1.0e-3 ${nmin1} $(2*v_nmin1)
+write_data      relaxed.data
+
+# ---------------- Stage 2: thermalize at 10 K ----------------
+reset_timestep  0
+timestep        0.25
+thermo          200
+velocity        all create ${T} ${seed} mom yes rot yes dist gaussian
+fix             mom all momentum 100 linear 1 1 1 angular
+dump            th all xyz ${ndump} traj_thermal.xyz
+dump_modify     th element Ca Si O H
+
+fix             nve all nve
+fix             tb all temp/berendsen ${T} ${T} 25.0
+run             ${nber}
+unfix           tb
+unfix           nve
+
+fix             npt all npt temp ${T} ${T} 100.0 z 0.0 0.0 1000.0
+run             ${nnpt}
+unfix           npt
+fix             nvt all nvt temp ${T} ${T} 100.0
+run             ${nnvt}
+write_restart   thermal.restart

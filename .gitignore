@@ -1,0 +1,42 @@
+# --- Local LAMMPS installs (binaries, ~50 MB each; rebuild/reinstall instead) ---
+/lammps/
+/clayff/lammps/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- SLURM job output ---
+slurm-*.out
+slurm-*.err
+*.o[0-9]*
+*.e[0-9]*
+nohup.out
+core.*
+
+# --- Heavy LAMMPS outputs (trajectories, restarts) ---
+*.lammpstrj
+*.dump
+dump.*
+*.restart
+restart.*
+*.rst
+log.lammps
+log.cite
+
+# --- Per-run simulation directories (keep summary .dat/.png at results/ top level) ---
+/results/*/
+
+# --- Editor / OS cruft ---
+*~
+*.swp
+*.swo
+.DS_Store
+.vscode/
+.idea/
+
+# --- Claude Code local settings ---
+.claude/settings.local.json

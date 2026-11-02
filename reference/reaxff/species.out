@@ -1,0 +1,602 @@
+#  Timestep    No_Moles    No_Specs H825O3955Ca888Si1328         H2O          HO
+          0        1050           3           1        1046           3
+#  Timestep    No_Moles    No_Specs H831O3958Ca888Si1328         H2O          HO
+        400        1047           3           1        1043           3
+#  Timestep    No_Moles    No_Specs H831O3958Ca888Si1328         H2O          HO
+        800        1047           3           1        1043           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       1200        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H829O3957Ca888Si1328         H2O          HO
+       1600        1048           3           1        1044           3
+#  Timestep    No_Moles    No_Specs H839O3962Ca888Si1328         H2O          HO
+       2000        1043           3           1        1039           3
+#  Timestep    No_Moles    No_Specs H840O3963Ca888Si1328         H2O          HO
+       2400        1042           3           1        1039           2
+#  Timestep    No_Moles    No_Specs H836O3961Ca888Si1328         H2O          HO
+       2800        1044           3           1        1041           2
+#  Timestep    No_Moles    No_Specs H841O3963Ca888Si1328         H2O          HO
+       3200        1042           3           1        1038           3
+#  Timestep    No_Moles    No_Specs H841O3963Ca888Si1328         H2O          HO
+       3600        1042           3           1        1038           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+       4000        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H829O3957Ca888Si1328         H2O          HO
+       4400        1048           3           1        1044           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+       4800        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       5200        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       5600        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H831O3958Ca888Si1328         H2O          HO
+       6000        1047           3           1        1043           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+       6400        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H831O3958Ca888Si1328         H2O          HO
+       6800        1047           3           1        1043           3
+#  Timestep    No_Moles    No_Specs H837O3961Ca888Si1328         H2O          HO
+       7200        1044           3           1        1040           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+       7600        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H841O3963Ca888Si1328         H2O          HO
+       8000        1042           3           1        1038           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       8400        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       8800        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H836O3961Ca888Si1328         H2O          HO
+       9200        1044           3           1        1041           2
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+       9600        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H837O3961Ca888Si1328         H2O          HO
+      10000        1044           3           1        1040           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+      10400        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H837O3961Ca888Si1328         H2O          HO
+      10800        1044           3           1        1040           3
+#  Timestep    No_Moles    No_Specs H839O3962Ca888Si1328         H2O          HO
+      11200        1043           3           1        1039           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+      11600        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H835O3960Ca888Si1328         H2O          HO
+      12000        1045           3           1        1041           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+      12400        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H837O3961Ca888Si1328         H2O          HO
+      12800        1044           3           1        1040           3
+#  Timestep    No_Moles    No_Specs H827O3956Ca888Si1328         H2O          HO
+      13200        1049           3           1        1045           3
+#  Timestep    No_Moles    No_Specs H839O3962Ca888Si1328         H2O          HO
+      13600        1043           3           1        1039           3
+#  Timestep    No_Moles    No_Specs H837O3961Ca888Si1328         H2O          HO
+      14000        1044           3           1        1040           3
+#  Timestep    No_Moles    No_Specs H841O3963Ca888Si1328         H2O          HO
+      14400        1042           3           1        1038           3
+#  Timestep    No_Moles    No_Specs H843O3964Ca888Si1328         H2O          HO
+      14800        1041           3           1        1037           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+      15200        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H833O3959Ca888Si1328         H2O          HO
+      15600        1046           3           1        1042           3
+#  Timestep    No_Moles    No_Specs H846O3966Ca888Si1328         H2O          HO
+      16000        1039           3           1        1036           2
+#  Timestep    No_Moles    No_Specs H830O3958Ca888Si1328         H2O          HO
+      16400        1047           3           1        1044           2
+#  Timestep    No_Moles    No_Specs H842O3964Ca888Si1328         H2O          HO
+      16800        1041           3           1        1038           2
+#  Timestep    No_Moles    No_Specs H840O3963Ca888Si1328         H2O          HO
+      17200        1042           3           1        1039           2
+#  Timestep    No_Moles    No_Specs H842O3964Ca888Si1328         H2O          HO
+      17600        1041           3           1        1038           2
+#  Timestep    No_Moles    No_Specs H848O3967Ca888Si1328         H2O          HO
+      18000        1038           3           1        1035           2
+#  Timestep    No_Moles    No_Specs H838O3962Ca888Si1328         H2O          HO
+      18400        1043           3           1        1040           2
+#  Timestep    No_Moles    No_Specs H844O3965Ca888Si1328         H2O          HO
+      18800        1040           3           1        1037           2
+#  Timestep    No_Moles    No_Specs H832O3959Ca888Si1328         H2O          HO
+      19200        1046           3           1        1043           2
+#  Timestep    No_Moles    No_Specs H848O3967Ca888Si1328         H2O          HO
+      19600        1038           3           1        1035           2
+#  Timestep    No_Moles    No_Specs H850O3968Ca888Si1328         H2O          HO
+      20000        1037           3           1        1034           2
+#  Timestep    No_Moles    No_Specs H844O3965Ca888Si1328         H2O          HO
+      20400        1040           3           1        1037           2
+#  Timestep    No_Moles    No_Specs H858O3972Ca888Si1328         H2O          HO
+      20800        1033           3           1        1030           2
+#  Timestep    No_Moles    No_Specs H858O3972Ca888Si1328         H2O          HO
+      21200        1033           3           1        1030           2
+#  Timestep    No_Moles    No_Specs H846O3966Ca888Si1328         H2O          HO
+      21600        1039           3           1        1036           2
+#  Timestep    No_Moles    No_Specs H866O3976Ca888Si1328         H2O          HO
+      22000        1029           3           1        1026           2
+#  Timestep    No_Moles    No_Specs H862O3974Ca888Si1328         H2O          HO
+      22400        1031           3           1        1028           2
+#  Timestep    No_Moles    No_Specs H876O3981Ca888Si1328         H2O          HO
+      22800        1024           3           1        1021           2
+#  Timestep    No_Moles    No_Specs H874O3980Ca888Si1328         H2O          HO
+      23200        1025           3           1        1022           2
+#  Timestep    No_Moles    No_Specs H890O3988Ca888Si1328         H2O          HO
+      23600        1017           3           1        1014           2
+#  Timestep    No_Moles    No_Specs H888O3987Ca888Si1328         H2O          HO
+      24000        1018           3           1        1015           2
+#  Timestep    No_Moles    No_Specs H888O3987Ca888Si1328         H2O          HO
+      24400        1018           3           1        1015           2
+#  Timestep    No_Moles    No_Specs H894O3990Ca888Si1328         H2O          HO
+      24800        1015           3           1        1012           2
+#  Timestep    No_Moles    No_Specs H910O3998Ca888Si1328         H2O          HO
+      25200        1007           3           1        1004           2
+#  Timestep    No_Moles    No_Specs H920O4003Ca888Si1328         H2O          HO
+      25600        1002           3           1         999           2
+#  Timestep    No_Moles    No_Specs H914O4000Ca888Si1328         H2O          HO
+      26000        1005           3           1        1002           2
+#  Timestep    No_Moles    No_Specs H942O4014Ca888Si1328         H2O          HO
+      26400         991           3           1         988           2
+#  Timestep    No_Moles    No_Specs H922O4004Ca888Si1328         H2O          HO
+      26800        1001           3           1         998           2
+#  Timestep    No_Moles    No_Specs H926O4006Ca888Si1328         H2O          HO
+      27200         999           3           1         996           2
+#  Timestep    No_Moles    No_Specs H934O4010Ca888Si1328         H2O          HO
+      27600         995           3           1         992           2
+#  Timestep    No_Moles    No_Specs H944O4015Ca888Si1328         H2O          HO
+      28000         990           3           1         987           2
+#  Timestep    No_Moles    No_Specs H924O4005Ca888Si1328         H2O          HO
+      28400        1000           3           1         997           2
+#  Timestep    No_Moles    No_Specs H944O4015Ca888Si1328         H2O          HO
+      28800         990           3           1         987           2
+#  Timestep    No_Moles    No_Specs H942O4014Ca888Si1328         H2O          HO
+      29200         991           3           1         988           2
+#  Timestep    No_Moles    No_Specs H950O4018Ca888Si1328         H2O          HO
+      29600         987           3           1         984           2
+#  Timestep    No_Moles    No_Specs H974O4030Ca888Si1328         H2O          HO
+      30000         975           3           1         972           2
+#  Timestep    No_Moles    No_Specs H962O4024Ca888Si1328         H2O          HO
+      30400         981           3           1         978           2
+#  Timestep    No_Moles    No_Specs H972O4029Ca888Si1328         H2O          HO
+      30800         976           3           1         973           2
+#  Timestep    No_Moles    No_Specs H970O4028Ca888Si1328         H2O          HO
+      31200         977           3           1         974           2
+#  Timestep    No_Moles    No_Specs H988O4037Ca888Si1328         H2O          HO
+      31600         968           3           1         965           2
+#  Timestep    No_Moles    No_Specs H976O4031Ca888Si1328         H2O          HO
+      32000         974           3           1         971           2
+#  Timestep    No_Moles    No_Specs H988O4037Ca888Si1328         H2O          HO
+      32400         968           3           1         965           2
+#  Timestep    No_Moles    No_Specs H986O4036Ca888Si1328         H2O          HO
+      32800         969           3           1         966           2
+#  Timestep    No_Moles    No_Specs H990O4038Ca888Si1328         H2O          HO
+      33200         967           3           1         964           2
+#  Timestep    No_Moles    No_Specs H988O4037Ca888Si1328         H2O          HO
+      33600         968           3           1         965           2
+#  Timestep    No_Moles    No_Specs H996O4041Ca888Si1328         H2O          HO
+      34000         964           3           1         961           2
+#  Timestep    No_Moles    No_Specs H986O4036Ca888Si1328         H2O          HO
+      34400         969           3           1         966           2
+#  Timestep    No_Moles    No_Specs H991O4039Ca888Si1328         H2O          HO
+      34800         966           3           1         964           1
+#  Timestep    No_Moles    No_Specs H999O4043Ca888Si1328         H2O          HO
+      35200         962           3           1         960           1
+#  Timestep    No_Moles    No_Specs H1017O4052Ca888Si1328         H2O          HO
+      35600         953           3           1         951           1
+#  Timestep    No_Moles    No_Specs H1027O4057Ca888Si1328         H2O        H3O2
+      36000         947           3           1         945           1
+#  Timestep    No_Moles    No_Specs H1003O4045Ca888Si1328         H2O          HO
+      36400         960           3           1         958           1
+#  Timestep    No_Moles    No_Specs H1029O4058Ca888Si1328         H2O          HO
+      36800         947           3           1         945           1
+#  Timestep    No_Moles    No_Specs H1023O4055Ca888Si1328         H2O          HO
+      37200         950           3           1         948           1
+#  Timestep    No_Moles    No_Specs H1001O4044Ca888Si1328         H2O        H3O2
+      37600         960           3           1         958           1
+#  Timestep    No_Moles    No_Specs H1031O4059Ca888Si1328         H2O          HO
+      38000         946           3           1         944           1
+#  Timestep    No_Moles    No_Specs H1024O4056Ca888Si1328         H2O
+      38400         949           2           1         948
+#  Timestep    No_Moles    No_Specs H1040O4064Ca888Si1328         H2O
+      38800         941           2           1         940
+#  Timestep    No_Moles    No_Specs H1028O4058Ca888Si1328         H2O
+      39200         947           2           1         946
+#  Timestep    No_Moles    No_Specs H1054O4071Ca888Si1328         H2O
+      39600         934           2           1         933
+#  Timestep    No_Moles    No_Specs H1056O4072Ca888Si1328         H2O
+      40000         933           2           1         932
+#  Timestep    No_Moles    No_Specs H1060O4074Ca888Si1328         H2O
+      40400         931           2           1         930
+#  Timestep    No_Moles    No_Specs H1060O4074Ca888Si1328         H2O
+      40800         931           2           1         930
+#  Timestep    No_Moles    No_Specs H1046O4067Ca888Si1328         H2O
+      41200         938           2           1         937
+#  Timestep    No_Moles    No_Specs H1076O4082Ca888Si1328         H2O
+      41600         923           2           1         922
+#  Timestep    No_Moles    No_Specs H1080O4084Ca888Si1328         H2O
+      42000         921           2           1         920
+#  Timestep    No_Moles    No_Specs H1084O4086Ca888Si1328         H2O
+      42400         919           2           1         918
+#  Timestep    No_Moles    No_Specs H1100O4094Ca888Si1328         H2O
+      42800         911           2           1         910
+#  Timestep    No_Moles    No_Specs H1098O4093Ca888Si1328         H2O
+      43200         912           2           1         911
+#  Timestep    No_Moles    No_Specs H1110O4099Ca888Si1328         H2O
+      43600         906           2           1         905
+#  Timestep    No_Moles    No_Specs H1110O4099Ca888Si1328         H2O
+      44000         906           2           1         905
+#  Timestep    No_Moles    No_Specs H1092O4090Ca888Si1328         H2O
+      44400         915           2           1         914
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      44800         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1106O4097Ca888Si1328         H2O
+      45200         908           2           1         907
+#  Timestep    No_Moles    No_Specs H1132O4110Ca888Si1328         H2O
+      45600         895           2           1         894
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      46000         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      46400         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      46800         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+      47200         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1154O4121Ca888Si1328         H2O
+      47600         884           2           1         883
+#  Timestep    No_Moles    No_Specs H1162O4125Ca888Si1328         H2O
+      48000         880           2           1         879
+#  Timestep    No_Moles    No_Specs H1182O4135Ca888Si1328         H2O
+      48400         870           2           1         869
+#  Timestep    No_Moles    No_Specs H1186O4137Ca888Si1328         H2O
+      48800         868           2           1         867
+#  Timestep    No_Moles    No_Specs H1170O4129Ca888Si1328         H2O
+      49200         876           2           1         875
+#  Timestep    No_Moles    No_Specs H1164O4126Ca888Si1328         H2O
+      49600         879           2           1         878
+#  Timestep    No_Moles    No_Specs H1168O4128Ca888Si1328         H2O
+      50000         877           2           1         876
+#  Timestep    No_Moles    No_Specs H1178O4133Ca888Si1328         H2O
+      50400         872           2           1         871
+#  Timestep    No_Moles    No_Specs H1168O4128Ca888Si1328         H2O
+      50800         877           2           1         876
+#  Timestep    No_Moles    No_Specs H1162O4125Ca888Si1328         H2O
+      51200         880           2           1         879
+#  Timestep    No_Moles    No_Specs H1158O4123Ca888Si1328         H2O
+      51600         882           2           1         881
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+      52000         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      52400         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      52800         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      53200         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      53600         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      54000         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      54400         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1114O4101Ca888Si1328         H2O
+      54800         904           2           1         903
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      55200         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1104O4096Ca888Si1328         H2O
+      55600         909           2           1         908
+#  Timestep    No_Moles    No_Specs H1104O4096Ca888Si1328         H2O
+      56000         909           2           1         908
+#  Timestep    No_Moles    No_Specs H1106O4097Ca888Si1328         H2O
+      56400         908           2           1         907
+#  Timestep    No_Moles    No_Specs H1106O4097Ca888Si1328         H2O
+      56800         908           2           1         907
+#  Timestep    No_Moles    No_Specs H1090O4089Ca888Si1328         H2O
+      57200         916           2           1         915
+#  Timestep    No_Moles    No_Specs H1086O4087Ca888Si1328         H2O
+      57600         918           2           1         917
+#  Timestep    No_Moles    No_Specs H1104O4096Ca888Si1328         H2O
+      58000         909           2           1         908
+#  Timestep    No_Moles    No_Specs H1102O4095Ca888Si1328         H2O
+      58400         910           2           1         909
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      58800         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1108O4098Ca888Si1328         H2O
+      59200         907           2           1         906
+#  Timestep    No_Moles    No_Specs H1110O4099Ca888Si1328         H2O
+      59600         906           2           1         905
+#  Timestep    No_Moles    No_Specs H1108O4098Ca888Si1328         H2O
+      60000         907           2           1         906
+#  Timestep    No_Moles    No_Specs H1110O4099Ca888Si1328         H2O
+      60400         906           2           1         905
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      60800         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      61200         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      61600         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1136O4112Ca888Si1328         H2O
+      62000         893           2           1         892
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      62400         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      62800         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      63200         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      63600         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1122O4105Ca888Si1328         H2O
+      64000         900           2           1         899
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      64400         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1136O4112Ca888Si1328         H2O
+      64800         893           2           1         892
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      65200         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1128O4108Ca888Si1328         H2O
+      65600         897           2           1         896
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      66000         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      66400         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1146O4117Ca888Si1328         H2O
+      66800         888           2           1         887
+#  Timestep    No_Moles    No_Specs H1150O4119Ca888Si1328         H2O
+      67200         886           2           1         885
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      67600         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      68000         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      68400         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1120O4104Ca888Si1328         H2O
+      68800         901           2           1         900
+#  Timestep    No_Moles    No_Specs H1114O4101Ca888Si1328         H2O
+      69200         904           2           1         903
+#  Timestep    No_Moles    No_Specs H1120O4104Ca888Si1328         H2O
+      69600         901           2           1         900
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      70000         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      70400         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1150O4119Ca888Si1328         H2O
+      70800         886           2           1         885
+#  Timestep    No_Moles    No_Specs H1148O4118Ca888Si1328         H2O
+      71200         887           2           1         886
+#  Timestep    No_Moles    No_Specs H1148O4118Ca888Si1328         H2O
+      71600         887           2           1         886
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      72000         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1146O4117Ca888Si1328         H2O
+      72400         888           2           1         887
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      72800         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      73200         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1146O4117Ca888Si1328         H2O
+      73600         888           2           1         887
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      74000         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      74400         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1128O4108Ca888Si1328         H2O
+      74800         897           2           1         896
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      75200         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1108O4098Ca888Si1328         H2O
+      75600         907           2           1         906
+#  Timestep    No_Moles    No_Specs H1120O4104Ca888Si1328         H2O
+      76000         901           2           1         900
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      76400         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      76800         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1110O4099Ca888Si1328         H2O
+      77200         906           2           1         905
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      77600         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      78000         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1128O4108Ca888Si1328         H2O
+      78400         897           2           1         896
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      78800         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      79200         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1120O4104Ca888Si1328         H2O
+      79600         901           2           1         900
+#  Timestep    No_Moles    No_Specs H1106O4097Ca888Si1328         H2O
+      80000         908           2           1         907
+#  Timestep    No_Moles    No_Specs H1124O4106Ca888Si1328         H2O
+      80400         899           2           1         898
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      80800         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      81200         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      81600         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      82000         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1122O4105Ca888Si1328         H2O
+      82400         900           2           1         899
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      82800         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1118O4103Ca888Si1328         H2O
+      83200         902           2           1         901
+#  Timestep    No_Moles    No_Specs H1128O4108Ca888Si1328         H2O
+      83600         897           2           1         896
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      84000         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1122O4105Ca888Si1328         H2O
+      84400         900           2           1         899
+#  Timestep    No_Moles    No_Specs H1116O4102Ca888Si1328         H2O
+      84800         903           2           1         902
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      85200         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      85600         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      86000         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      86400         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1132O4110Ca888Si1328         H2O
+      86800         895           2           1         894
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      87200         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      87600         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1158O4123Ca888Si1328         H2O
+      88000         882           2           1         881
+#  Timestep    No_Moles    No_Specs H1146O4117Ca888Si1328         H2O
+      88400         888           2           1         887
+#  Timestep    No_Moles    No_Specs H1122O4105Ca888Si1328         H2O
+      88800         900           2           1         899
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      89200         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      89600         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      90000         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      90400         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      90800         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      91200         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+      91600         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      92000         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      92400         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1160O4124Ca888Si1328         H2O
+      92800         881           2           1         880
+#  Timestep    No_Moles    No_Specs H1154O4121Ca888Si1328         H2O
+      93200         884           2           1         883
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      93600         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1136O4112Ca888Si1328         H2O
+      94000         893           2           1         892
+#  Timestep    No_Moles    No_Specs H1120O4104Ca888Si1328         H2O
+      94400         901           2           1         900
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+      94800         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+      95200         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      95600         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1126O4107Ca888Si1328         H2O
+      96000         898           2           1         897
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      96400         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+      96800         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      97200         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      97600         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      98000         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1130O4109Ca888Si1328         H2O
+      98400         896           2           1         895
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      98800         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1134O4111Ca888Si1328         H2O
+      99200         894           2           1         893
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+      99600         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1150O4119Ca888Si1328         H2O
+     100000         886           2           1         885
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+     100400         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1138O4113Ca888Si1328         H2O
+     100800         892           2           1         891
+#  Timestep    No_Moles    No_Specs H1148O4118Ca888Si1328         H2O
+     101200         887           2           1         886
+#  Timestep    No_Moles    No_Specs H1140O4114Ca888Si1328         H2O
+     101600         891           2           1         890
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+     102000         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+     102400         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1156O4122Ca888Si1328         H2O
+     102800         883           2           1         882
+#  Timestep    No_Moles    No_Specs H1166O4127Ca888Si1328         H2O
+     103200         878           2           1         877
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+     103600         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1156O4122Ca888Si1328         H2O
+     104000         883           2           1         882
+#  Timestep    No_Moles    No_Specs H1154O4121Ca888Si1328         H2O
+     104400         884           2           1         883
+#  Timestep    No_Moles    No_Specs H1142O4115Ca888Si1328         H2O
+     104800         890           2           1         889
+#  Timestep    No_Moles    No_Specs H1158O4123Ca888Si1328         H2O
+     105200         882           2           1         881
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+     105600         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1156O4122Ca888Si1328         H2O
+     106000         883           2           1         882
+#  Timestep    No_Moles    No_Specs H1148O4118Ca888Si1328         H2O
+     106400         887           2           1         886
+#  Timestep    No_Moles    No_Specs H1160O4124Ca888Si1328         H2O
+     106800         881           2           1         880
+#  Timestep    No_Moles    No_Specs H1164O4126Ca888Si1328         H2O
+     107200         879           2           1         878
+#  Timestep    No_Moles    No_Specs H1146O4117Ca888Si1328         H2O
+     107600         888           2           1         887
+#  Timestep    No_Moles    No_Specs H1144O4116Ca888Si1328         H2O
+     108000         889           2           1         888
+#  Timestep    No_Moles    No_Specs H1148O4118Ca888Si1328         H2O
+     108400         887           2           1         886
+#  Timestep    No_Moles    No_Specs H1160O4124Ca888Si1328         H2O
+     108800         881           2           1         880
+#  Timestep    No_Moles    No_Specs H1174O4131Ca888Si1328         H2O
+     109200         874           2           1         873
+#  Timestep    No_Moles    No_Specs H1154O4121Ca888Si1328         H2O
+     109600         884           2           1         883
+#  Timestep    No_Moles    No_Specs H1156O4122Ca888Si1328         H2O
+     110000         883           2           1         882
+#  Timestep    No_Moles    No_Specs H1164O4126Ca888Si1328         H2O
+     110400         879           2           1         878
+#  Timestep    No_Moles    No_Specs H1152O4120Ca888Si1328         H2O
+     110800         885           2           1         884
+#  Timestep    No_Moles    No_Specs H1178O4133Ca888Si1328         H2O
+     111200         872           2           1         871
+#  Timestep    No_Moles    No_Specs H1180O4134Ca888Si1328         H2O
+     111600         871           2           1         870
+#  Timestep    No_Moles    No_Specs H1188O4138Ca888Si1328         H2O
+     112000         867           2           1         866
+#  Timestep    No_Moles    No_Specs H1186O4137Ca888Si1328         H2O
+     112400         868           2           1         867
+#  Timestep    No_Moles    No_Specs H1182O4135Ca888Si1328         H2O
+     112800         870           2           1         869
+#  Timestep    No_Moles    No_Specs H1180O4134Ca888Si1328         H2O
+     113200         871           2           1         870
+#  Timestep    No_Moles    No_Specs H1200O4144Ca888Si1328         H2O
+     113600         861           2           1         860
+#  Timestep    No_Moles    No_Specs H1178O4133Ca888Si1328         H2O
+     114000         872           2           1         871
+#  Timestep    No_Moles    No_Specs H1184O4136Ca888Si1328         H2O
+     114400         869           2           1         868
+#  Timestep    No_Moles    No_Specs H1198O4143Ca888Si1328         H2O
+     114800         862           2           1         861
+#  Timestep    No_Moles    No_Specs H1180O4134Ca888Si1328         H2O
+     115200         871           2           1         870
+#  Timestep    No_Moles    No_Specs H1180O4134Ca888Si1328         H2O
+     115600         871           2           1         870
+#  Timestep    No_Moles    No_Specs H1194O4141Ca888Si1328         H2O
+     116000         864           2           1         863
+#  Timestep    No_Moles    No_Specs H1180O4134Ca888Si1328         H2O
+     116400         871           2           1         870
+#  Timestep    No_Moles    No_Specs H1166O4127Ca888Si1328         H2O
+     116800         878           2           1         877
+#  Timestep    No_Moles    No_Specs H1192O4140Ca888Si1328         H2O
+     117200         865           2           1         864
+#  Timestep    No_Moles    No_Specs H1194O4141Ca888Si1328         H2O
+     117600         864           2           1         863
+#  Timestep    No_Moles    No_Specs H1196O4142Ca888Si1328         H2O
+     118000         863           2           1         862
+#  Timestep    No_Moles    No_Specs H1174O4131Ca888Si1328         H2O
+     118400         874           2           1         873
+#  Timestep    No_Moles    No_Specs H1190O4139Ca888Si1328         H2O
+     118800         866           2           1         865
+#  Timestep    No_Moles    No_Specs H1186O4137Ca888Si1328         H2O
+     119200         868           2           1         867
+#  Timestep    No_Moles    No_Specs H1182O4135Ca888Si1328         H2O
+     119600         870           2           1         869
+#  Timestep    No_Moles    No_Specs H1194O4141Ca888Si1328         H2O
+     120000         864           2           1         863
