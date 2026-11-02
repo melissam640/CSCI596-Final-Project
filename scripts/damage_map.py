@@ -4,7 +4,7 @@
 Usage:
   python damage_map.py OUTDIR LABEL=traj_compress.lammpstrj [LABEL=...]
          [--strains 5,8,12,14,20,30] [--rc 4.0] [--crack LABEL]
-         [--crack-a 10] [--crack-tilt 45]
+         [--crack-a 10] [--crack-tilt 45] [--crack-zc 0.5]
 
 Reference state is frame 0 of each dump (post-NPT). Frame k is at k x 0.1 % strain
 (dump every 400 steps x 0.25 fs, erate 1e-5/fs). Per atom and per requested strain:
@@ -163,7 +163,7 @@ def style(ax):
     ax.set_aspect("equal")
 
 
-def slab_figure(fn, runs, labels, strains, mode, crack, crack_a, crack_tilt):
+def slab_figure(fn, runs, labels, strains, mode, crack, crack_a, crack_tilt, crack_zc):
     nr, nc = len(runs), len(strains)
     fig, axes = plt.subplots(nr, nc, figsize=(2.1 * nc + 0.9, 3.4 * nr if mode == "y" else 2.4 * nr),
                              squeeze=False)
@@ -192,7 +192,7 @@ def slab_figure(fn, runs, labels, strains, mode, crack, crack_a, crack_tilt):
                 lz0 = box0[2, 1] - box0[2, 0]
                 t = np.radians(crack_tilt)
                 s = np.array([-crack_a, crack_a])
-                zs0 = 0.5 * lz0 - s * np.sin(t)           # relative to zlo
+                zs0 = crack_zc * lz0 - s * np.sin(t)           # relative to zlo
                 ax.plot(s * np.cos(t), box[2, 0] + zs0 * lz / lz0, "--", color="#1baf7a", lw=0.9)
             style(ax)
             if row == 0:
@@ -221,6 +221,7 @@ def main():
     ap.add_argument("--crack", default=None, help="label of the run with the penny crack")
     ap.add_argument("--crack-a", type=float, default=10.0)
     ap.add_argument("--crack-tilt", type=float, default=45.0)
+    ap.add_argument("--crack-zc", type=float, default=0.5, help="crack center, fraction of Lz (frame 0)")
     a = ap.parse_args()
     strains = [float(s) for s in a.strains.split(",")]
     os.makedirs(a.outdir, exist_ok=True)
@@ -252,9 +253,9 @@ def main():
 
     shown = [r["strain"] for r in runs[0][3]]
     slab_figure(os.path.join(a.outdir, "shear_slices.png"), runs, labels, shown, "y",
-                a.crack, a.crack_a, a.crack_tilt)
+                a.crack, a.crack_a, a.crack_tilt, a.crack_zc)
     slab_figure(os.path.join(a.outdir, "shear_xsection.png"), runs, labels, shown, "z",
-                a.crack, a.crack_a, a.crack_tilt)
+                a.crack, a.crack_a, a.crack_tilt, a.crack_zc)
 
     fig, ax = plt.subplots(figsize=(6.4, 4.4))
     ax2 = ax.twinx()

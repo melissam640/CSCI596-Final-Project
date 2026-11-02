@@ -192,6 +192,33 @@ Findings:
 - **Bonds.** At most 4 Si–O bonds break. The silicate chains survive, so the damage is
   Ca–O and interlayer rearrangement.
 
+## crack2: horizontal penny crack through a Ca sheet (in progress)
+
+Motivation: in crack1 the failure became a horizontal (layer-parallel) band (§3). crack2
+puts the crack flat (tilt 0°, normal ∥ z ∥ c), on the midplane of a Ca sheet.
+
+- New `build_pillar.py` flag `--crack-snap-ca`. It clusters the bulk-cell Ca z values into
+  sheets (midplanes at 5.91 and 17.63 Å in the 23.42 Å cell) and moves the crack centre to the
+  sheet nearest `--crack-zc`. Mid-height (zc 0.5) is an interlayer, so snapping is required.
+  The builder now also prints the removed atoms per element.
+- Regression check: crack1 parameters without snapping still give N = 10047, 106 removed
+  (Ca9 Si15 O49 H33) and 237 H added.
+- Build (2026-11-02), `/scratch1/mm18756/tobermolite/crack2`:
+  `build_pillar.py --R 20.0 --nc 4 --vac 40 --crack-a 10 --crack-h 4 --crack-tilt 0 --crack-zc 0.56 --crack-snap-ca`
+  - The crack centre snapped to z = 52.75 Å (zc = 0.5631). The nearest Si planes are at
+    −2.16 and +2.14 Å, just outside the ±2 Å opening, so no SiO4 is cut.
+  - 27 atoms were removed, all Ca. N = 10167, 278 H added (outer surface, same rule as
+    crack1), final charge 0, minimum interatomic distance 0.970 Å.
+  - Check against run1, r < 10 Å and |z − 52.75| < 2: Ca 27 → 0, Si 0 → 0. Si total at
+    r < 10 Å is 320 in both pillars.
+- Submitted 2026-11-02 from `crack2/`: equil job 13678139, and compress job 13678140
+  (`--dependency=afterok:13678139`). Results will be copied to `results/crack2/`.
+- Viewing in OVITO: this is a horizontal disk, so look along y (*Front* viewport) with a
+  y-slab at 60. To highlight it, use
+  `abs(Position.Z - (CellOrigin.Z + 0.5631*CellSize.Z)) < 2 && (Position.X-60)^2 + (Position.Y-60)^2 < 100`.
+  This assumes the crack scales with the box in z.
+- Damage maps after the run: `damage_map.py ... --crack crack0 --crack-tilt 0 --crack-zc 0.5631`.
+
 ## Next steps
 
 - Done (§3): the kink is rim damage that turns into a horizontal band at the crack height.

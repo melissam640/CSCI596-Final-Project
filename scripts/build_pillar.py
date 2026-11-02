@@ -2,13 +2,15 @@
 """Carve a cylindrical tobermorite-11A pillar (axis = crystal c = z) from info/tobe.xyz.
 
 Usage: python build_pillar.py [--R 20.2] [--nc 4] [--vac 40] [--target 10000] [--out DIR]
-       [--crack-a 10 --crack-h 4 --crack-tilt 45 --crack-az 0 --crack-zc 0.5]
+       [--crack-a 10 --crack-h 4 --crack-tilt 45 --crack-az 0 --crack-zc 0.5 [--crack-snap-ca]]
 
 Keeps whole SiO4 tetrahedra and whole H2O/OH units, then charge-balances the
 formal charges (Ca+2 Si+4 O-2 H+1) by protonating outermost non-bridging Si-O
 (if negative) or deleting outermost Ca (if positive).
 Optional embedded penny-shaped crack (--crack-a > 0): whole units whose Si/Ca/
 water-O center lies in the disk are removed before charge balance.
+--crack-tilt 0 gives a flat crack parallel to the layers; --crack-snap-ca moves the crack
+center to the Ca-sheet midplane nearest --crack-zc (the default zc 0.5 is an interlayer).
 Writes pillar.data (LAMMPS atom_style charge) and pillar0.xyz.
 """
 import argparse
@@ -33,6 +35,25 @@ def read_frame1(path):
     return np.array(sp), np.array(xyz), lat  # lat rows = a, b, c
 
 
+def snap_to_ca_sheet(sp0, x0, c, nc, zc_frac, gap=2.5):
+    """z of the Ca-sheet midplane nearest zc_frac*nc*c; prints the Si clearance."""
+    z = np.sort(x0[sp0 == "Ca", 2] % c)
+    cuts = np.where(np.diff(z) > gap)[0]
+    groups = np.split(z, cuts + 1)
+    if len(groups) > 1 and z[0] + c - z[-1] <= gap:   # cluster wraps through z = 0
+        groups[0] = np.concatenate([groups[-1] - c, groups[0]])
+        groups.pop()
+    mids = np.array([g.mean() for g in groups]) % c
+    allmid = np.sort((mids[None, :] + c * np.arange(nc)[:, None]).ravel())
+    target = zc_frac * nc * c
+    zs = allmid[np.argmin(np.abs(allmid - target))]
+    dsi = (x0[sp0 == "Si", 2] - zs + c / 2) % c - c / 2
+    print(f"Ca-sheet midplanes in cell (A): {' '.join(f'{m:.2f}' for m in sorted(mids))}; "
+          f"crack snapped {target:.2f} -> {zs:.2f} A (zc={zs / (nc * c):.4f}); "
+          f"nearest Si planes {dsi[dsi < 0].max():+.2f} / {dsi[dsi > 0].min():+.2f} A")
+    return zs
+
+
 def build(args):
     sp0, x0, lat = read_frame1(args.xyz)
     a, b, c = lat
@@ -53,6 +74,9 @@ def build(args):
     r = np.hypot(X[:, 0], X[:, 1])
     crop = r < args.R + 6.0
     X, S, r = X[crop], S[crop], r[crop]
+
+    if args.crack_a > 0 and args.crack_snap_ca:
+        args.crack_zc = snap_to_ca_sheet(sp0, x0, c[2], args.nc, args.crack_zc) / Lz
 
     # optional penny-shaped crack: disk of radius a, opening h, normal tilted from z
     incrack = np.zeros(len(S), bool)
@@ -93,7 +117,8 @@ def build(args):
         return keep, si_keep
 
     keep, si_keep = select(incrack)
-    ncrack = select(np.zeros(len(S), bool))[0].sum() - keep.sum()
+    gone = select(np.zeros(len(S), bool))[0] & ~keep
+    ncrack = {e: int((gone & (S == e)).sum()) for e in TYPES}
 
     # charge balance
     q = sum(QFORMAL[e] for e in S[keep])
@@ -148,7 +173,7 @@ def crack_label(args):
     if args.crack_a <= 0:
         return ""
     return (f" crack a={args.crack_a} h={args.crack_h} tilt={args.crack_tilt}"
-            f" az={args.crack_az} zc={args.crack_zc}")
+            f" az={args.crack_az} zc={args.crack_zc:.4g}")
 
 
 def write(args, X, S, Lz):
@@ -187,6 +212,8 @@ def main():
     p.add_argument("--crack-tilt", type=float, default=45.0, help="crack normal vs z (deg)")
     p.add_argument("--crack-az", type=float, default=0.0, help="azimuth of the tilt in xy (deg)")
     p.add_argument("--crack-zc", type=float, default=0.5, help="crack center, fraction of Lz")
+    p.add_argument("--crack-snap-ca", action="store_true",
+                   help="move the crack center to the nearest Ca-sheet midplane")
     args = p.parse_args()
     X, S, Lz, q, nadd, ncrack = build(args)
     els, cnt = np.unique(S, return_counts=True)
@@ -195,7 +222,8 @@ def main():
     print(f"R={args.R} Lz={Lz:.4f} N={len(S)} " + " ".join(f"{e}{n}" for e, n in zip(els, cnt)))
     print(f"formal charge before balance={q}, H added={nadd}, final={qf}, r_max={rr.max():.2f}")
     if args.crack_a > 0:
-        print(f"penny{crack_label(args)}: {ncrack} atoms removed")
+        print(f"penny{crack_label(args)}: {sum(ncrack.values())} atoms removed "
+              f"({' '.join(f'{e}{n}' for e, n in ncrack.items())})")
     if not args.dry:
         print(f"min interatomic distance={min_dist(X, Lz):.3f} A")
         write(args, X, S, Lz)
