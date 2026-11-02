@@ -146,8 +146,53 @@ Plot: `results/compare_crack1.png`. Curves: `results/stress_strain_{intact,crack
 - After the peak, the intact pillar drops to about 7.5 GPa, but crack1 levels off
   higher, at about 9 GPa.
 
+### 3. Damage maps (2026-11-02)
+
+Script: `scripts/damage_map.py` (numpy only). It computes per-atom von Mises shear
+strain η (Shimizu, Ogata & Li 2007; the same as OVITO Atomic Strain, cutoff 4 Å) and D²min
+relative to frame 0 of `traj_compress.lammpstrj`. It also flags Si that lost a frame-0
+Si–O bond (d > 2.3 Å) and Ca whose Ca–O coordination (< 2.9 Å) changed by 2 or more.
+
+```
+python scripts/damage_map.py results/damage \
+  intact=/scratch1/mm18756/tobermolite/run1/traj_compress.lammpstrj \
+  crack=/scratch1/mm18756/tobermolite/crack1/traj_compress.lammpstrj \
+  --strains 5,8,12,14,20,30 --crack crack
+```
+
+It takes about 17 s on the login node. Outputs go to `results/damage/` (not tracked by git):
+`shear_slices.png` (edge-on y-slab), `shear_xsection.png` (mid-height xy-slab),
+`damage_vs_strain.png`, `damage_summary.dat`, and `damage_<run>_<strain>.xyz` (extended
+XYZ with `eta d2min broken` columns, for OVITO).
+
+Checks: frame 0 against itself gives η = 0 and F_zz = 1.000. At 5 % strain the core median
+F_zz is 0.951.
+
+| Run | ε | core p99 η | fraction η > 0.2 | core median F_zz | broken Si–O | Ca Δcn ≥ 2 |
+|---|---|---|---|---|---|---|
+| intact | 8 % | 0.13 | 4.3 % | 0.920 | 0 | 22 |
+| crack | 8 % | 0.27 | 6.9 % | 0.942 | 0 | 23 |
+| intact | 14 % | 0.45 | 29 % | 0.871 | 0 | 66 |
+| crack | 14 % | 0.57 | 24 % | 0.899 | 0 | 60 |
+| intact | 30 % | 1.52 | 64 % | 0.642 | 1 | 147 |
+| crack | 30 % | 1.99 | 62 % | 0.860 | 4 | 117 |
+
+Findings:
+
+- **Intact (run1).** Shear stays spread out until the peak (12 %). At 14 % a horizontal
+  band forms across the full width at z ≈ 55–70 Å. By 20–30 % there are two wide bands.
+  The layers are ⊥ c = z, so this is layer-parallel (interlayer) collapse, not a 45° shear plane.
+- **Crack (crack1).** At 8 % (the kink) shear concentrates at the crack rim. Core p99 η is
+  twice the intact value. By 12 % the damage zone runs **horizontally** across the pillar at
+  the crack height (z ≈ 40–50 Å). It does not follow the 45° crack plane. By 30 % the band
+  has widened and the pillar bulges (x up to about ±28 Å).
+- **Higher post-peak stress in crack1.** At 30 % the crack1 core is compressed much less
+  than run1 (core F_zz 0.86 vs 0.64). Shortening is concentrated in the single crack band
+  while the rest of the pillar stays nearly elastic. In run1, two bands collapse.
+- **Bonds.** At most 4 Si–O bonds break. The silicate chains survive, so the damage is
+  Ca–O and interlayer rearrangement.
+
 ## Next steps
 
-- Look at the crack1 trajectory near 8% strain and at the peak (14%) to see whether
-  the kink is crack-face sliding or rim growth, and why its post-peak stress stays higher.
+- Done (§3): the kink is rim damage that turns into a horizontal band at the crack height.
 - Then decide on the deferred tilt/radius sweeps.
