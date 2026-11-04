@@ -192,7 +192,7 @@ Findings:
 - **Bonds.** At most 4 Si–O bonds break. The silicate chains survive, so the damage is
   Ca–O and interlayer rearrangement.
 
-## crack2: horizontal penny crack through a Ca sheet (in progress)
+## crack2: horizontal penny crack through a Ca sheet
 
 Motivation: in crack1 the failure became a horizontal (layer-parallel) band (§3). crack2
 puts the crack flat (tilt 0°, normal ∥ z ∥ c), on the midplane of a Ca sheet.
@@ -217,9 +217,90 @@ puts the crack flat (tilt 0°, normal ∥ z ∥ c), on the midplane of a Ca shee
   y-slab at 60. To highlight it, use
   `abs(Position.Z - (CellOrigin.Z + 0.5631*CellSize.Z)) < 2 && (Position.X-60)^2 + (Position.Y-60)^2 < 100`.
   This assumes the crack scales with the box in z.
-- Damage maps after the run: `damage_map.py ... --crack crack0 --crack-tilt 0 --crack-zc 0.5631`.
+- Both jobs COMPLETED with exit code 0 (equil 1 h 48 m, compress 1 h 56 m). The only
+  warnings are the usual ReaxFF force-field ones. Results were copied to `results/crack2/`.
+  R0 stays at 20.35 Å, the same as for crack1, so the stresses are directly comparable.
+
+### crack2 results (2026-11-03)
+
+**1. Crack after equilibration.** Scripts: `/scratch1/mm18756/tmp/crack_open2.py`
+(crack_open.py with tilt 0 and zc as an argument) and `crack2_gap.py` (not backed up).
+Region: flat slab |z − zc| < 2 Å, r < 10 Å, centred at `zlo + 0.5631 Lz`.
+
+| State | run1 slab | crack2 slab | z-gap at r < 8 Å, run1 | z-gap, crack2 |
+|---|---|---|---|---|
+| as built | 84 (Ca28 O56) | 56 (Ca1 O55) | 2.08 Å | 2.42 Å |
+| minimized | 91 (Ca30 O61) | 53 (Ca2 O51) | | |
+| after NPT+NVT (frame 0) | 93 (Ca30 Si2 O61) | 58 (Ca3 O55) | 1.95 Å | 1.84 Å |
+
+- The crack removed only Ca. The sheet O stay, so crack2 is a disc of Ca vacancies, not an
+  open slit like crack1. The vacancies survive equilibration: 3 Ca return, compared with 30
+  in run1.
+- The z-gap is the largest empty z interval through the sheet midplane. The two O layers move
+  inward during equilibration, from 2.42 to 1.84 Å, which is slightly below the intact value
+  of 1.95 Å. So there is no geometric opening left, only the missing Ca.
+- Lz after NPT: 93.08 Å (run1 93.17, crack1 93.05).
+
+**2. Stress–strain.** Plot: `results/compare_crack2.png` (intact, crack1, crack2). Curves:
+`results/stress_strain_{intact,crack1,crack2}.dat`. `stress_strain_crack1.dat` holds the same
+data as the older `stress_strain_crack.dat`.
+
+| Run | Peak (GPa) | Strain at peak | E₀, ε<2 % (GPa) | σ at 8 % / 10 % | Mean σ, ε=20–30 % |
+|---|---|---|---|---|---|
+| intact | 11.44 | 0.120 | 124.2 | 8.25 / 10.29 | 7.53 |
+| crack1 | 10.09 | 0.142 | 113.5 | 7.07 / 7.73 | 8.98 |
+| crack2 | 9.67 | 0.195 | 111.8 | 7.08 / 8.04 | 9.02 |
+
+- crack2 follows crack1 up to about 9 %: the same modulus loss (−10 %) and the same kink near
+  8 % at about 7–8 GPa. So in both cracks the kink comes from a weakened Ca sheet / interlayer,
+  not from the tilted slit geometry.
+- After the kink, crack2 has **no sharp peak**. The stress rises slowly, from about 8.0 GPa at
+  10 % to a broad maximum of 9.7 GPa at 19.5 %, and then falls gently to about 8.4 GPa at 30 %.
+  crack1 has a small peak at 14 % and then drops. The plateau averages are the same (about 9 GPa).
+
+**3. Damage maps.** Output in `results/damage_crack2/` (not tracked by git; the crack1 maps in
+`results/damage/` were left as they were):
+
+```
+python scripts/damage_map.py results/damage_crack2 \
+  intact=/scratch1/mm18756/tobermolite/run1/traj_compress.lammpstrj \
+  crack2=/scratch1/mm18756/tobermolite/crack2/traj_compress.lammpstrj \
+  --strains 5,8,12,14,20,30 --crack crack2 --crack-tilt 0 --crack-zc 0.5631
+```
+
+| Run | ε | core p99 η | fraction η > 0.2 | core median F_zz | broken Si–O | Ca Δcn ≥ 2 |
+|---|---|---|---|---|---|---|
+| crack2 | 5 % | 0.15 | 1.6 % | 0.961 | 0 | 8 |
+| crack2 | 8 % | 0.26 | 6.4 % | 0.940 | 0 | 24 |
+| crack2 | 12 % | 0.50 | 21 % | 0.922 | 0 | 50 |
+| crack2 | 14 % | 0.70 | 26 % | 0.916 | 1 | 48 |
+| crack2 | 20 % | 1.09 | 38 % | 0.883 | 3 | 80 |
+| crack2 | 30 % | 1.71 | 68 % | 0.728 | 6 | 129 |
+
+(The intact rows are the same as in §3.)
+
+- At 5–8 % shear is concentrated in the Ca-vacancy disc. Core p99 η is already 1.7× the
+  intact value at 5 % and 2× at 8 %, about the same as crack1 at the kink.
+- At 12 % a horizontal band runs across the full width at the crack height (z ≈ 45–60 Å).
+  This is the same layer-parallel failure as crack1, but here it starts exactly on the
+  weakened sheet.
+- The band stays single and widens up to 20 %. By 30 % a second band forms lower down
+  (z ≈ 20–40 Å) and the pillar bulges. Core F_zz at 30 % is 0.73, between crack1 (0.86,
+  one band) and intact (0.64, two bands).
+- At most 6 Si–O bonds break. As in crack1, the silicate chains survive and the damage is
+  Ca–O and interlayer rearrangement.
+- Caveat: the `shear_xsection.png` slab is at mid-height (z ≈ 46.5 Å), about 6 Å below the
+  crack plane. It still cuts the band, but it is not a section through the crack itself.
+
+**Interpretation.** Removing Ca from a single sheet is enough to reproduce crack1's
+softening and kink. A slit is not needed. The flat Ca-vacancy disc delays and spreads the
+post-yield response (a broad maximum at 19.5 % instead of a peak at 14 %), probably because
+the band starts on a plane that is already perpendicular to the load and keeps hardening as
+the O layers close up.
 
 ## Next steps
 
 - Done (§3): the kink is rim damage that turns into a horizontal band at the crack height.
-- Then decide on the deferred tilt/radius sweeps.
+- Done (crack2): a flat Ca-sheet vacancy disc gives the same kink as the tilted slit.
+- Then decide on the deferred tilt/radius sweeps. A crack radius sweep at tilt 0 on a Ca
+  sheet would isolate how the defect size controls the yield point.
