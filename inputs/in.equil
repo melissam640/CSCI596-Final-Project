@@ -1,7 +1,7 @@
 # Tobermorite-11A pillar (axis = crystal c = z): relaxation + thermalization at 10 K
 # Produces relaxed.data, thermal.restart, traj_thermal.xyz.  Follow with in.compress.
 
-variable ffield index /home1/mm18756/tobermolite/info/ffield-CaSiOH-lammps.reax.txt
+variable ffield index /home1/mm18756/tobermorite/info/ffield-CaSiOH-lammps.reax.txt
 variable T      index 10.0
 variable seed   index 482911
 variable nmin1  index 5000        # CG iterations, atoms only (fixed box; Lz relaxed later by NPT)

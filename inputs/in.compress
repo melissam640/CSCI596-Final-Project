@@ -1,6 +1,6 @@
 # Tobermorite-11A pillar: uniaxial compression along z at 1%/ps, 10 K, from thermal.restart
 
-variable ffield index /home1/mm18756/tobermolite/info/ffield-CaSiOH-lammps.reax.txt
+variable ffield index /home1/mm18756/tobermorite/info/ffield-CaSiOH-lammps.reax.txt
 variable T      index 10.0
 variable ncomp  index 120000      # 30 ps -> 30% strain
 variable erate  index -1.0e-5     # 1/fs  (= -1%/ps, engineering)
