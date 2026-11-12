@@ -310,20 +310,20 @@ the O layers close up.
 Motivation: so far every pillar had c ∥ z, which puts the layers perpendicular to the load.
 In this pillar the crystal is rotated +90° about y, so c ∥ x and the load axis z lies in the
 layer plane. The crack2-style penny (a disc of Ca vacancies in one Ca sheet) rotates with the
-layers, so its normal is now x. The new code lives in `prep/`. `scripts/build_pillar.py` is unchanged.
+layers, so its normal is now x. The new code lives in `perp/`. `scripts/build_pillar.py` is unchanged.
 
-- `prep/rotate_cell.py` maps (x, y, z) → (z, y, −x) and writes `prep/tobe_rot.xyz` with rows
+- `perp/rotate_cell.py` maps (x, y, z) → (z, y, −x) and writes `perp/tobe_rot.xyz` with rows
   c' = (23.42, 0, 0), b' = (0, 25.80, 16.54) and −a' = (0, 0, 28.01). The pillar axis is crystal a.
   The script checks that the cell volume (16 924.65 Å³), the fractional coordinates and the minimum
   distance (1.0014 Å) are unchanged, and that the Ca sheets are now the planes x = 5.91 and 17.63 Å.
-- `prep/build_pillar.py` is `scripts/build_pillar.py` adapted to this cell:
+- `perp/build_pillar.py` is `scripts/build_pillar.py` adapted to this cell:
   - The periodic vector is the third row (+z), and b' may have a z component.
   - The axis goes on the Ca-sheet midplane nearest the cell centre (x = 5.91 Å), which replaces
     `--crack-snap-ca`.
   - The crack defaults are tilt 90 and az 0, so the normal is x.
   - It prints R0 for `-var R0`.
 - Build (2026-11-10), `/scratch1/mm18756/tobermorite/rot_penny`:
-  `prep/build_pillar.py --R 20.0 --nc 4 --vac 40 --crack-a 10 --crack-h 4`
+  `perp/build_pillar.py --R 20.0 --nc 4 --vac 40 --crack-a 10 --crack-h 4`
   - Lz = 4 × 28.01 = 112.04 Å, N = 12541 (Ca995 Si1600 O6112 H3834), 442 H added, final charge 0,
     minimum distance 0.970 Å. R0 = 20.69 Å (intact rotated pillar: N = 12512, R0 = 20.67).
   - The penny removed 29 atoms, all Ca. The nearest Si planes are −2.16 / +2.14 Å from the sheet,
@@ -425,7 +425,7 @@ intact c ∥ z pillar.
 
 ### Next steps (rotated pillar)
 
-- Run the intact rotated pillar (`prep/build_pillar.py --R 20.0 --nc 4 --vac 40`, N = 12512,
+- Run the intact rotated pillar (`perp/build_pillar.py --R 20.0 --nc 4 --vac 40`, N = 12512,
   `-var R0 20.67`) so the penny effect can be measured within the c ∥ x orientation.
 - Check whether the soft toe region (E₀ ≈ 53 GPa) comes from the 5.9 % NPT contraction along a.
   One test is a longer NPT, or a strain referenced to the as-built Lz.
