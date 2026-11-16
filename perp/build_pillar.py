@@ -101,12 +101,24 @@ def build(args):
         return np.linalg.norm(d, axis=2)
 
     iSi, iO, iH, iCa = (np.where(S == e)[0] for e in ("Si", "O", "H", "Ca"))
-    dSiO = pair_d(iSi, iO) < R_SIO           # [nSi, nO]
-    dOH = pair_d(iO, iH)                      # [nO, nH]
-    h_owner = iO[np.argmin(dOH, axis=0)]      # O index of each H
-    h_ok = dOH.min(axis=0) < R_OH               # crop-edge H may lose their O
+    # Si-O bonds as sparse pairs (bs, bo) = positions in (iSi, iO), in row-major order; dense
+    # [nSi, nO] / [nO, nH] matrices need tens of GB once R is ~40 A, so work in chunks.
+    CH = 64
+    bs, bo = [], []
+    for k in range(0, len(iSi), CH):
+        a, b = np.nonzero(pair_d(iSi[k:k + CH], iO) < R_SIO)
+        bs.append(a + k)
+        bo.append(b)
+    bs, bo = np.concatenate(bs), np.concatenate(bo)
+    h_owner, h_dmin = [], []
+    for k in range(0, len(iH), CH):
+        d = pair_d(iO, iH[k:k + CH])          # [nO, chunk]
+        h_owner.append(iO[np.argmin(d, axis=0)])   # O index of each H
+        h_dmin.append(d.min(axis=0))
+    h_owner = np.concatenate(h_owner)
+    h_ok = np.concatenate(h_dmin) < R_OH      # crop-edge H may lose their O
     assert np.all(h_ok | (r[iH] > args.R + 2)), "H without O partner inside pillar"
-    o_nsi = dSiO.sum(axis=0)                  # Si neighbors per O
+    o_nsi = np.bincount(bo, minlength=len(iO))   # Si neighbors per O
 
     def select(excl):
         """Whole-unit selection inside R, skipping Si/Ca/free-O centers flagged in excl."""
@@ -114,7 +126,8 @@ def build(args):
         si_keep = (r[iSi] < args.R) & ~excl[iSi]
         keep[iSi[si_keep]] = True
         keep[iCa[(r[iCa] < args.R) & ~excl[iCa]]] = True
-        o_from_si = dSiO[si_keep].any(axis=0)
+        o_from_si = np.zeros(len(iO), bool)
+        o_from_si[bo[si_keep[bs]]] = True
         o_free = (o_nsi == 0) & (r[iO] < args.R) & ~excl[iO]   # water / Ca-OH oxygens
         keep[iO[o_from_si | o_free]] = True
         keep[iH] = keep[h_owner] & h_ok
@@ -129,16 +142,16 @@ def build(args):
     newH = []
     if q < 0:
         # non-bridging O: bonded to exactly one kept Si and no H
-        nkeptSi = dSiO[si_keep].sum(axis=0)
+        kb = si_keep[bs]                      # bonds whose Si is kept
+        nkeptSi = np.bincount(bo[kb], minlength=len(iO))
         nH = np.bincount(np.searchsorted(iO, h_owner[h_ok]), minlength=len(iO))
         cand = np.where(keep[iO] & (nkeptSi == 1) & (nH == 0))[0]
         cand = cand[np.argsort(-r[iO[cand]])]
         if len(cand) < -q:
             raise SystemExit(f"not enough non-bridging O to protonate (q={q})")
-        sik = iSi[si_keep]
         for oc in cand[:-q]:
             o = iO[oc]
-            s = sik[np.where(dSiO[si_keep][:, oc])[0][0]]
+            s = iSi[bs[kb & (bo == oc)].min()]   # lowest-index kept Si bonded to this O
             vv = X[o] - X[s]
             vv[2] -= Lz * np.round(vv[2] / Lz)
             vv /= np.linalg.norm(vv)
@@ -164,11 +177,12 @@ def build(args):
 
 def min_dist(X, Lz, cut=1.5):
     best = np.inf
-    for i in range(0, len(X), 500):
-        d = X[None, :, :] - X[i:i + 500, None, :]
+    ch = 100   # chunk rows; memory ~ ch * N * 24 B
+    for i in range(0, len(X), ch):
+        d = X[None, :, :] - X[i:i + ch, None, :]
         d[..., 2] -= Lz * np.round(d[..., 2] / Lz)
         dd = np.linalg.norm(d, axis=2)
-        idx = np.arange(i, min(i + 500, len(X)))
+        idx = np.arange(i, min(i + ch, len(X)))
         dd[np.arange(len(idx)), idx] = np.inf
         best = min(best, dd.min())
     return best

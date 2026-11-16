@@ -222,6 +222,8 @@ def main():
     ap.add_argument("--crack-a", type=float, default=10.0)
     ap.add_argument("--crack-tilt", type=float, default=45.0)
     ap.add_argument("--crack-zc", type=float, default=0.5, help="crack center, fraction of Lz (frame 0)")
+    ap.add_argument("--core", type=float, default=10.0,
+                    help="core radius (Å) for the core η / F_zz columns; ~R/2 keeps it comparable across sizes")
     a = ap.parse_args()
     strains = [float(s) for s in a.strains.split(",")]
     os.makedirs(a.outdir, exist_ok=True)
@@ -239,7 +241,7 @@ def main():
         for r in res:
             x = r["x"]
             rr = np.hypot(x[:, 0] - x[:, 0].mean(), x[:, 1] - x[:, 1].mean())
-            core, eta = rr < 10.0, r["eta"]
+            core, eta = rr < a.core, r["eta"]
             row = (np.nanmedian(eta), np.nanmean(eta[core]), np.nanpercentile(eta[core], 99),
                    np.nanmean(eta[~core]), np.nanmean(eta > ETA_DAMAGED),
                    np.nanmedian(r["fzz"][core]), r["n_sio"],

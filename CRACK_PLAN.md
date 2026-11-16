@@ -429,3 +429,108 @@ intact c ∥ z pillar.
   `-var R0 20.67`) so the penny effect can be measured within the c ∥ x orientation.
 - Check whether the soft toe region (E₀ ≈ 53 GPa) comes from the 5.9 % NPT contraction along a.
   One test is a longer NPT, or a strain referenced to the as-built Lz.
+
+## rot_penny_x10: the rot_penny geometry at ~10× the atoms
+
+Motivation: check whether the rot_penny result depends on pillar size. The geometry is scaled so that
+a/R stays at 0.5 and the penny remains a single Ca-sheet vacancy disc.
+
+- Code changes made for this size (uncommitted until this section):
+  - `perp/build_pillar.py` now stores Si–O bonds as sparse pairs and computes the O–H owner in chunks.
+    The dense [nSi, nO] matrices would need tens of GB at R ≈ 40 Å. `min_dist` uses 100-row chunks.
+  - `scripts/damage_map.py` adds a `--core` option (default 10 Å) for the core η / F_zz columns.
+    Use about R/2 so the values can be compared across sizes.
+- Build (2026-11-12), `/scratch1/mm18756/tobermorite/rot_penny_x10` (log: `build.log`, 731 s):
+  `perp/build_pillar.py --R 43.0 --nc 9 --vac 40 --crack-a 21.5 --crack-h 4`
+  - Lz = 9 × 28.01 = 252.09 Å, box 166 × 166 Å. N = 125 917 (Ca10811 Si16848 O62424 H35834),
+    2354 H added, final charge 0, minimum distance 0.970 Å. R0 = 43.72 Å.
+  - The penny removed 133 atoms, all Ca (rot_penny: 29). As before, it lies on the Ca-sheet midplane
+    x = 5.91 Å, and the nearest Si planes are −2.16 / +2.14 Å away.
+- Submitted 2026-11-12: equil job 14059080, and compress job 14059081 (`afterok`), both
+  `--nodes=2 --ntasks=128 --ntasks-per-node=64 --time=16:00:00 … -var R0 43.72`.
+  Both COMPLETED with exit code 0: equil 5 h 27 m, compress 6 h 48 m (vs 2 h 09 m / 2 h 18 m on 32
+  ranks for rot_penny). The only warnings are the usual ReaxFF force-field ones. Results were copied
+  to `results/rot_penny_x10/`. The stress back-computed from Pzz·Lx·Ly gives R0 = 43.720.
+- Caveat: the CG minimization stopped at the force-evaluation cap (4992 iterations, 10 001
+  evaluations), not at the energy tolerance (rot_penny: 271 iterations). The Berendsen/NPT/NVT stages
+  that follow relax the structure. At the end of Berendsen, Pzz-based σ = −2.21 GPa, the same as
+  rot_penny (−2.25).
+
+### rot_penny_x10 results (2026-11-16)
+
+**1. Penny after equilibration.** Script: `/scratch1/mm18756/tmp/rot_open_x10.py <rundir> 21.5`
+(rot_open.py generalized: slab |x − x_c| < 2, ρ_yz < a; core |x − x_c| < 1, ρ < a − 2; gap at ρ < a − 2).
+The reference disc is shifted by Lz/2 in z, on the same Ca sheet.
+
+| State | Lz (Å) | disc slab | reference slab | x-gap, disc / reference |
+|---|---|---|---|---|
+| as built | 252.09 | 254 (O254) | 387 (Ca133 O254) | 2.42 / 2.08 Å |
+| minimized | 252.09 | 161 (O161) | 423 (Ca133 Si30 O260) | 2.18 / 1.84 Å |
+| after NPT+NVT (frame 0) | 237.94 | 226 (Ca11 O210 H5) | 444 (Ca145 Si10 O289) | 1.43 / 1.97 Å |
+
+- The vacancy disc survives. 11 of 133 Ca move back in (8 %, vs 1 of 29 in rot_penny), and 5 H enter the
+  slab. As before, the O layers close in, so the result is a Ca-vacancy disc with no geometric slit.
+- During NPT, Lz shrinks 5.6 % (252.09 → 237.94 Å), compared with 5.9 % in rot_penny, so the
+  axial contraction along a does not depend on size.
+
+**2. Stress–strain.** Plot: `results/compare_rot_penny_x10.png`. Curve: `results/stress_strain_rot_penny_x10.dat`.
+
+| Run | N | Peak (GPa) | Strain at peak | E₀, ε<2 % | σ at 5 / 8 / 10 / 12 / 17 % | Mean σ, ε=20–30 % |
+|---|---|---|---|---|---|---|
+| rot_penny (R 20) | 12 541 | 16.62 | 0.174 | 52.6 | 3.04 / 5.79 / 7.90 / 10.41 / 16.50 | 12.54 |
+| rot_penny_x10 (R 43) | 125 917 | 20.64 | 0.193 | 58.2 | 3.14 / 6.00 / 8.51 / 11.33 / 18.60 | 17.50 |
+
+Tangent moduli (GPa) over 0–2 / 2–5 / 5–8 / 8–12 / 12–16 %: rot_penny 53 / 65 / 90 / 117 / 126;
+x10 58 / 67 / 94 / 133 / 148.
+
+- The curves agree within about 3 % up to 8 % strain. The convex toe is the same in both, so it is not a
+  small-pillar artefact. Above 8 % the larger pillar stays stiffer.
+- The larger pillar peaks 24 % higher (20.6 vs 16.6 GPa) and later (19.3 vs 17.4 %). The post-peak drop
+  is gentler: it falls 20.6 → 17.7 GPa over 4 % strain, compared with 16.6 → 13.1 GPa. Its plateau is 40 % higher.
+- A likely cause is the smaller surface fraction. Both runs normalize by the bulk-density R0, so a
+  softer, protonated surface shell carries less of the load at R = 43. This has not been separated
+  from a defect-size effect, since the penny also grew (a = 21.5 vs 10 Å).
+- Free water (`species.out`): 13 388 → 12 234 H2O over the run (−8.6 %). The loss starts after about
+  21 % strain, which is post-peak. rot_penny lost 4.0 % (1368 → 1313), starting at about 18 %.
+
+**3. Damage maps.** Output in `results/damage_rot_penny_x10/` (not tracked by git). Run on a debug
+node (15 min, 2.5 GB RSS; too heavy for the login node at this size):
+
+```
+python scripts/damage_map.py results/damage_rot_penny_x10 \
+  rot_penny_x10=/scratch1/mm18756/tobermorite/rot_penny_x10/traj_compress.lammpstrj \
+  --strains 5,8,12,14,17,19,20,30 --crack rot_penny_x10 --crack-a 21.5 --crack-tilt 90 \
+  --crack-zc 0.5 --core 21.5
+```
+
+Core = R/2 in both runs (21.5 Å here, 10 Å for rot_penny). Ca Δcn is also given as a percentage of all Ca,
+and broken Si–O as a percentage of Si, to compare across sizes.
+
+| ε | core p99 η, x10 / small | f(η>0.2), x10 / small | core F_zz, x10 / small | broken Si–O (% of Si), x10 / small | Ca Δcn ≥ 2 (% of Ca), x10 / small |
+|---|---|---|---|---|---|
+| 5 % | 0.10 / 0.12 | 0.5 / 1.0 % | 0.949 / 0.951 | 0 / 0 | 0.06 / 0 |
+| 8 % | 0.15 / 0.19 | 1.4 / 2.6 % | 0.919 / 0.922 | 0 / 0 | 0.4 / 0 |
+| 12 % | 0.21 / 0.26 | 4.4 / 7.6 % | 0.879 / 0.884 | 0 / 0 | 1.5 / 0.5 |
+| 14 % | 0.25 / 0.29 | 7.6 / 13 % | 0.859 / 0.867 | 0 / 0 | 2.2 / 1.2 |
+| 17 % | 0.31 / 0.36 | 17 / 23 % | 0.829 / 0.840 | 0 / 0 | 4.3 / 3.3 |
+| 19 % | 0.39 / – | 28 / – | 0.812 / – | 0 / – | 7.1 / – |
+| 20 % | 0.55 / 0.69 | 34 / 40 % | 0.811 / 0.850 | 0.05 / 0.25 | 8.0 / 5.8 |
+| 30 % | 1.84 / 1.64 | 50 / 57 % | 0.815 / 0.810 | 3.2 / 2.8 | 10.1 / 7.5 |
+
+(Absolute counts at 30 %: 534 broken Si–O and 1096 Ca Δcn, vs 45 and 75.)
+
+- The sequence is the same as in rot_penny. At 5–8 %, shear concentrates at the penny, mostly at its
+  lower rim. At 12–17 %, the strain spreads in columns that follow the vertical layers. After the peak
+  (19–20 %), a horizontal band crosses the full width at the penny height (z ≈ 110–145 Å). By 30 % the
+  pillar bulges at the band (x up to about ±60 Å, about 1.4 R, as in rot_penny) and breaks silicate chains.
+- Up to the peak, shear localizes less in the larger pillar: f(η>0.2) and core p99 η are lower at every
+  strain up to 20 %. This agrees with its higher peak. Ca–O rearrangement starts earlier (8 % vs
+  12 %), but it does not soften the curve.
+- At 30 % the per-atom damage is similar (Si–O 3.2 vs 2.8 % of Si). The size effect is mainly in
+  the onset of localization, not in the final damaged state.
+
+**Interpretation.** Scaling rot_penny up ~10× (R 20 → 43 Å, same a/R) leaves the mechanism unchanged:
+convex toe, penny-seeded post-peak band across the layers, and Si–O breakage. The small-strain response
+is size-independent. The larger pillar delays localization, so it is about 24 % stronger, with a 40 % higher
+plateau. Part of the strength of the 12.5 k-atom pillars therefore comes from finite size (surface
+fraction). The intact rotated pillar at both sizes is still needed to separate the penny from the orientation.
