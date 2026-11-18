@@ -26,6 +26,9 @@ export OMP_NUM_THREADS=1
 export TMPDIR=/scratch1/$USER/tmp
 mkdir -p "$TMPDIR"
 
+# in.damp_finite overwrites thermal.restart: keep the undamped one
+[[ $stage == damp* ]] && cp thermal.restart thermal_nvt.restart
+
 srun $LMP -in /home1/mm18756/tobermorite/inputs/in.$stage -log log.$stage "${@:2}"   # extra args, e.g. -var nnpt 400
 
 # backed-up copy of the small outputs; trajectories stay on scratch until reviewed
