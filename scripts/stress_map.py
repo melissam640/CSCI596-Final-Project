@@ -238,6 +238,8 @@ def main():
     ap.add_argument("--vmax", type=float, default=0.05, help="color limit for delta sigma / sigma_c")
     ap.add_argument("--edge", type=float, default=8.0, help="exclude bins within this of the surface (A)")
     ap.add_argument("--grip", type=float, default=8.0, help="grip thickness excluded at each end (A)")
+    ap.add_argument("--kmin-sc", type=float, default=1.0,
+                    help="k_vs_strain.png: hide k where sigma_c < this (GPa); k diverges as sigma_c -> 0")
     ap.add_argument("--no-kscan", action="store_true", help="only the map strains, not every frame")
     a = ap.parse_args()
     os.makedirs(a.outdir, exist_ok=True)
@@ -317,11 +319,12 @@ def main():
     fig, (ax, ax2) = plt.subplots(2, 1, figsize=(6.4, 6.0), sharex=True)
     for lab, col in zip(labels, COLORS):
         r = kdata[lab]
-        ax.plot(100 * r[:, 0], 100 * r[:, 2], "-", color=col, lw=1.6, label=f"{lab} core k_xx (normal to layers)")
-        ax.plot(100 * r[:, 0], 100 * r[:, 4], ":", color=col, lw=1.2, label=f"{lab} core k_yy")
+        kx, ky = np.where(r[:, 1] >= a.kmin_sc, r[:, 2], np.nan), np.where(r[:, 1] >= a.kmin_sc, r[:, 4], np.nan)
+        ax.plot(100 * r[:, 0], 100 * kx, "-", color=col, lw=1.6, label=f"{lab} core k_xx (normal to layers)")
+        ax.plot(100 * r[:, 0], 100 * ky, ":", color=col, lw=1.2, label=f"{lab} core k_yy")
         ax2.plot(100 * r[:, 0], r[:, 1], "-", color=col, lw=1.6, label=lab)
     ax.axhline(0, color=MUTED, lw=0.6)
-    ax.set_ylabel("k = max core-averaged Δσ / σ_c (%)", color=MUTED)
+    ax.set_ylabel(f"k = max core Δσ / σ_c (%), σ_c ≥ {a.kmin_sc:g} GPa", color=MUTED)
     ax.set_title("Boundary-induced transverse tension", color=INK, loc="left")
     ax2.set_ylabel("σ_c, mid-height (GPa)", color=MUTED)
     ax2.set_xlabel("engineering strain (%)", color=MUTED)
