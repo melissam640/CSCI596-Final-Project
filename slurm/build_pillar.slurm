@@ -20,4 +20,5 @@ export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 export TMPDIR=/scratch1/$USER/tmp
 mkdir -p "$TMPDIR"
 
-/usr/bin/time -v python /home1/mm18756/tobermorite/perp/build_pillar.py "$@" 2>&1 | tee build.log
+set -o pipefail                                # a failed build must fail the job (not hidden by tee)
+time python /home1/mm18756/tobermorite/perp/build_pillar.py "$@" 2>&1 | tee build.log

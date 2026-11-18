@@ -111,7 +111,7 @@ also a flaw-based trigger, which the PRL argues is not needed.
   node. If so, run them in `salloc --partition=debug`.
 
 Log:
-- 2026-11-18: build submitted, job 14349668.
+- 2026-11-18: build job 14349668 failed in 1 s (no `/usr/bin/time` on compute nodes; the exit code was hidden by `| tee`). Fixed (bash `time` + `pipefail`) and resubmitted as job 14349715.
 
 ## Viewing in OVITO
 
