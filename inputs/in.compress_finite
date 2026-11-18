@@ -1,0 +1,106 @@
+# Finite tobermorite-11A pillar: uniaxial compression along z between platens, 1 %/ps, 10 K
+# From thermal.restart (in.equil_finite). Select the end condition with -var ends:
+#   clamped  rigid grips (atoms within ${grip} A of each end): bottom frozen, top moved down
+#            rigidly with no lateral motion = the "clamped platen" of Khodadad et al. (PRL 2026)
+#   wall     two frictionless planar walls (fix indent plane): the ends can slide laterally
+#            (control; boundary-induced transverse tension should vanish)
+# Required: -var R0 <A> (bulk-density equivalent radius printed by perp/build_pillar.py).
+# Stage A (hold, nhold steps, no load) gives the reference time-averaged per-atom stress.
+# Stage B (load): dumps traj_compress.lammpstrj every ndump steps (frame k = k x 0.1 % strain)
+# and stress_compress.lammpstrj every nsdump steps (per-atom stress x volume, atm*A^3,
+# averaged over the last 20 x 10 steps; first frame = unloaded reference).
+
+variable ffield index /home1/mm18756/tobermorite/info/ffield-CaSiOH-lammps.reax.txt
+variable ends   index clamped
+variable T      index 10.0
+variable ncomp  index 100000      # 25 ps -> 25 % strain
+variable erate  index -1.0e-5     # 1/fs (= -1 %/ps, engineering, relative to L0)
+variable R0     index 0.0         # REQUIRED: -var R0 ...
+variable grip   index 8.0         # grip thickness (A), clamped mode
+variable Kw     index 100.0       # wall stiffness (kcal/mol/A^3), wall mode
+variable nhold  index 2000        # 0.5 ps unloaded hold
+variable ndump  index 400         # 100 fs = 0.1 % strain
+variable nsdump index 2000        # 500 fs = 0.5 % strain
+
+if "${R0} <= 0.0" then "print 'ERROR: pass -var R0 <radius in A>'" "quit 1"
+if "!(${ends} == clamped || ${ends} == wall)" then "print 'ERROR: -var ends clamped|wall'" "quit 1"
+
+read_restart    thermal.restart
+pair_style      reaxff NULL checkqeq yes safezone 3.0 mincap 150
+pair_coeff      * * ${ffield} Ca Si O H
+fix             qeq all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+timestep        0.25
+reset_timestep  0                 # before any time-averaging fix
+balance         1.1 shift xyz 20 1.05
+
+# geometry of the thermalized pillar
+variable        zlo0 equal $(bound(all,zmin))
+variable        zhi0 equal $(bound(all,zmax))
+variable        L0   equal $(v_zhi0-v_zlo0)
+variable        vz   equal $(v_erate*v_L0)        # platen velocity, A/fs (negative = down)
+print           "pillar z ${zlo0} .. ${zhi0}, L0 = ${L0} A, platen velocity ${vz} A/fs, ends = ${ends}"
+
+# load -> engineering stress: 1 kcal/mol/A = 0.0694786 nN; 1 nN/A^2 = 100 GPa
+variable        f2gpa equal 6.94786/(PI*v_R0^2)
+
+if "${ends} == clamped" then &
+  "region rtop block INF INF INF INF $(v_zhi0-v_grip) INF units box" &
+  "region rbot block INF INF INF INF INF $(v_zlo0+v_grip) units box" &
+  "group top region rtop" &
+  "group bot region rbot" &
+  "group mid subtract all top bot" &
+  "velocity top set 0.0 0.0 0.0" &
+  "velocity bot set 0.0 0.0 0.0" &
+  "fix bfix bot setforce 0.0 0.0 0.0" &
+  "compute ftop top reduce sum fz" &
+  "variable ftop equal c_ftop" &
+  "variable fbot equal f_bfix[3]" &
+  "fix nvt mid nvt temp ${T} ${T} 100.0" &
+  "variable zwall equal ${zhi0}" &
+else &
+  "group mid union all" &
+  "variable zwall equal ${zhi0}" &
+  "fix itop all indent ${Kw} plane z v_zwall hi" &
+  "fix ibot all indent ${Kw} plane z ${zlo0} lo" &
+  "fix_modify itop energy no" &
+  "fix_modify ibot energy no" &
+  "variable ftop equal f_itop[3]" &
+  "variable fbot equal f_ibot[3]" &
+  "fix nvt all nvt temp ${T} ${T} 100.0" &
+  "fix mom all momentum 100 linear 1 1 0 angular"
+
+# ftop/fbot = z force ON the top/bottom platen (grip atoms, or the indent wall) in both modes:
+# compression pushes the top platen up (+) and the bottom one down (-). Signed: tension < 0.
+variable        load   equal 0.5*(v_ftop-v_fbot)
+variable        scomp  equal v_load*v_f2gpa
+variable        strain equal 0.0
+thermo_style    custom step time temp pe etotal lx ly lz v_strain v_ftop v_fbot v_scomp
+thermo_modify   flush yes
+thermo          40
+
+compute         sa all stress/atom NULL
+fix             sav all ave/atom 10 20 ${nsdump} c_sa[1] c_sa[2] c_sa[3] c_sa[4] c_sa[5] c_sa[6]
+fix             bal all balance 1000 1.1 shift xyz 20 1.05
+
+# ---------------- Stage A: unloaded hold (reference stress) ----------------
+run             ${nhold}
+
+# ---------------- Stage B: compression ----------------
+variable        t0 equal $(step)
+variable        strain equal -v_erate*(step-v_t0)*dt
+if "${ends} == clamped" then &
+  "fix mv top move linear 0.0 0.0 ${vz}" &
+else &
+  "variable zwall equal ${zhi0}+${vz}*(step-${t0})*dt"
+
+dump            cus all custom ${ndump} traj_compress.lammpstrj id type element x y z q
+dump_modify     cus element Ca Si O H sort id
+dump            str all custom ${nsdump} stress_compress.lammpstrj id element x y z &
+                f_sav[1] f_sav[2] f_sav[3] f_sav[4] f_sav[5] f_sav[6]
+dump_modify     str element Ca Si O H sort id format float %.6g
+fix             spec all reaxff/species 400 1 400 species.out
+run             ${ncomp}
+write_restart   compressed.restart
+write_data      compressed.data

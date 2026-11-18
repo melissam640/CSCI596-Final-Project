@@ -1,0 +1,44 @@
+# Finite tobermorite-11A pillar: damp the residual axial "breathing" mode left by in.equil_finite
+# The free pillar shrinks during equilibration and keeps ringing in its fundamental longitudinal
+# mode (period P = 2L/c; ~3.3 ps for L = 80 A). Berendsen / Nose-Hoover rescale the whole
+# system's kinetic energy and barely touch this coherent mode, so per-atom Langevin friction is
+# used, then NVT re-thermalizes. Reads and OVERWRITES thermal.restart (back it up first).
+# Choose tdamp ~ P/(4*pi) (near-critical damping of the mode) and ndamp*dt >~ 1.2 P:
+#   pilot  L = 80:  P ~ 3.3 ps -> tdamp 250 fs, ndamp 16000 (4 ps)   [defaults]
+#   R60   L = 240: P ~ 10 ps  -> tdamp 800 fs, ndamp 48000 (12 ps)
+# Follow with in.compress_finite.
+
+variable ffield index /home1/mm18756/tobermorite/info/ffield-CaSiOH-lammps.reax.txt
+variable T      index 10.0
+variable seed   index 731205
+variable tdamp  index 250.0       # Langevin damping time (fs)
+variable ndamp  index 16000       # 4 ps Langevin
+variable nnvt   index 10000       # 2.5 ps Nose-Hoover NVT
+
+read_restart    thermal.restart
+pair_style      reaxff NULL checkqeq yes safezone 3.0 mincap 150
+pair_coeff      * * ${ffield} Ca Si O H
+fix             qeq all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+timestep        0.25
+balance         1.1 shift xyz 20 1.05
+
+thermo_style    custom step time temp pe etotal lx ly lz
+thermo_modify   flush yes
+thermo          200
+
+fix             mom all momentum 100 linear 1 1 1 angular
+fix             bal all balance 2000 1.1 shift xyz 20 1.05
+
+# ---------------- Stage 1: Langevin damping of the coherent mode ----------------
+fix             nve all nve
+fix             lgv all langevin ${T} ${T} ${tdamp} ${seed} zero yes
+run             ${ndamp}
+unfix           lgv
+unfix           nve
+
+# ---------------- Stage 2: NVT at T ----------------
+fix             nvt all nvt temp ${T} ${T} 100.0
+run             ${nnvt}
+write_restart   thermal.restart

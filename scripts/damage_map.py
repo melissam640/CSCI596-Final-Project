@@ -6,8 +6,10 @@ Usage:
          [--strains 5,8,12,14,20,30] [--rc 4.0] [--crack LABEL]
          [--crack-a 10] [--crack-tilt 45] [--crack-zc 0.5]
 
-Reference state is frame 0 of each dump (post-NPT). Frame k is at k x 0.1 % strain
-(dump every 400 steps x 0.25 fs, erate 1e-5/fs). Per atom and per requested strain:
+Reference state is frame 0 of each dump (post-NPT, or the start of loading for a finite pillar).
+Frame k is at k x 0.1 % strain (dump every 400 steps x 0.25 fs, erate 1e-5/fs; --strain-per-frame).
+Finite pillars (dump header `BOX BOUNDS ss ss ss`, inputs/in.compress_finite) are detected
+automatically: no z minimum image is applied. Per atom and per requested strain:
   eta    von Mises atomic shear strain (Shimizu, Ogata & Li 2007; = OVITO Atomic Strain)
   d2min  non-affine residual (Falk & Langer 1998), A^2
   broken 1 = Si that lost a frame-0 Si-O bond (d0 < 2.0 A, now > 2.3 A),
@@ -33,8 +35,8 @@ SIO_CUT, SIO_BROKEN, CAO_CUT = 2.0, 2.3, 2.9   # Si-O cutoff as in build_pillar.
 
 
 def read_frames(path, wanted):
-    """Return {frame_index: (box[3,2], elem[N], xyz[N,3])} for the wanted frame indices."""
-    out, k = {}, -1
+    """Return ({frame_index: (box[3,2], elem[N], xyz[N,3])}, z_periodic) for the wanted frames."""
+    out, k, zper = {}, -1, True
     with open(path) as f:
         while len(out) < len(wanted):
             line = f.readline()
@@ -46,7 +48,7 @@ def read_frames(path, wanted):
             f.readline()
             f.readline()
             n = int(f.readline())
-            f.readline()
+            zper = f.readline().split()[-1] == "pp"     # ITEM: BOX BOUNDS xx yy zz
             box = np.array([[float(v) for v in f.readline().split()[:2]] for _ in range(3)])
             cols = f.readline().split()[2:]
             if k not in wanted:
@@ -63,11 +65,13 @@ def read_frames(path, wanted):
     missing = sorted(set(wanted) - set(out))
     if missing:
         raise SystemExit(f"{path}: frames {missing} not found (only {k + 1} frames)")
-    return out
+    return out, zper
 
 
 def min_image_z(d, lz):
-    d[..., 2] -= lz * np.round(d[..., 2] / lz)
+    """z minimum image; lz = None means z is not periodic (finite pillar)."""
+    if lz is not None:
+        d[..., 2] -= lz * np.round(d[..., 2] / lz)
     return d
 
 
@@ -116,11 +120,11 @@ def coordination(x, elem, a, b, lz, rc):
     return ia, ia[i], ib[j]
 
 
-def analyse(path, strains, rc):
-    wanted = [int(round(s * 10)) for s in strains]
-    data = read_frames(path, {0} | set(wanted))
+def analyse(path, strains, rc, spf=STRAIN_PER_FRAME):
+    wanted = [int(round(s / 100 / spf)) for s in strains]
+    data, zper = read_frames(path, {0} | set(wanted))
     box0, elem, x0 = data[0]
-    lz0 = box0[2, 1] - box0[2, 0]
+    lz0 = box0[2, 1] - box0[2, 0] if zper else None
     I, J = pairs_within(x0, x0, lz0, rc, same=True)
     _, si0, o0 = coordination(x0, elem, "Si", "O", lz0, SIO_CUT)
     ca_idx, ca_i, _ = coordination(x0, elem, "Ca", "O", lz0, CAO_CUT)
@@ -128,7 +132,7 @@ def analyse(path, strains, rc):
     res = []
     for k in wanted:
         box, _, x = data[k]
-        lz = box[2, 1] - box[2, 0]
+        lz = box[2, 1] - box[2, 0] if zper else None
         eta, d2min, fzz = atomic_strain(x0, lz0, x, lz, I, J)
         dsio = np.linalg.norm(min_image_z(x[o0] - x[si0], lz), axis=1)
         broken = np.zeros(len(x), int)
@@ -136,7 +140,7 @@ def analyse(path, strains, rc):
         _, ca_i1, _ = coordination(x, elem, "Ca", "O", lz, CAO_CUT)
         cn_ca = np.bincount(ca_i1, minlength=len(x))[ca_idx]
         broken[ca_idx[np.abs(cn_ca - cn_ca0) >= 2]] = 2
-        res.append(dict(frame=k, strain=k * STRAIN_PER_FRAME, box=box, x=x, eta=eta,
+        res.append(dict(frame=k, strain=k * spf, box=box, x=x, eta=eta, zper=zper,
                         d2min=d2min, fzz=fzz, broken=broken,
                         n_sio=int((dsio > SIO_BROKEN).sum())))
     return elem, box0, x0, res
@@ -148,7 +152,7 @@ def write_xyz(fn, elem, r):
     with open(fn, "w") as f:
         f.write(f"{len(elem)}\n")
         f.write(f'Lattice="{L[0]} 0 0 0 {L[1]} 0 0 0 {L[2]}" '
-                f'Origin="{box[0, 0]} {box[1, 0]} {box[2, 0]}" pbc="F F T" '
+                f'Origin="{box[0, 0]} {box[1, 0]} {box[2, 0]}" pbc="F F {"T" if r["zper"] else "F"}" '
                 f'Properties=species:S:1:pos:R:3:eta:R:1:d2min:R:1:broken:I:1 '
                 f'strain={r["strain"]:.4f}\n')
         for e, p, a, d, b in zip(elem, r["x"], np.nan_to_num(r["eta"]),
@@ -175,11 +179,13 @@ def slab_figure(fn, runs, labels, strains, mode, crack, crack_a, crack_tilt, cra
             xc, yc = x[:, 0].mean(), x[:, 1].mean()
             lz = box[2, 1] - box[2, 0]
             zc = box[2, 0] + 0.5 * lz
+            if not r["zper"]:              # finite pillar: slab at the atoms' mid-height
+                zc = 0.5 * (x[:, 2].min() + x[:, 2].max())
             if mode == "y":
                 m = np.abs(x[:, 1] - yc) < 3.0
                 u, v = x[m, 0] - xc, x[m, 2]
             else:
-                dz = min_image_z(x - [0, 0, zc], lz)[:, 2]
+                dz = min_image_z(x - [0, 0, zc], lz if r["zper"] else None)[:, 2]
                 m = np.abs(dz) < 3.0
                 u, v = x[m, 0] - xc, x[m, 1] - yc
             order = np.argsort(np.nan_to_num(r["eta"][m]))
@@ -222,6 +228,8 @@ def main():
     ap.add_argument("--crack-a", type=float, default=10.0)
     ap.add_argument("--crack-tilt", type=float, default=45.0)
     ap.add_argument("--crack-zc", type=float, default=0.5, help="crack center, fraction of Lz (frame 0)")
+    ap.add_argument("--strain-per-frame", type=float, default=STRAIN_PER_FRAME,
+                    help="engineering strain between consecutive dump frames")
     ap.add_argument("--core", type=float, default=10.0,
                     help="core radius (Å) for the core η / F_zz columns; ~R/2 keeps it comparable across sizes")
     a = ap.parse_args()
@@ -231,7 +239,7 @@ def main():
     for spec in a.runs:
         lab, path = spec.split("=", 1)
         labels.append(lab)
-        runs.append(analyse(path, strains, a.rc))
+        runs.append(analyse(path, strains, a.rc, a.strain_per_frame))
 
     lines = ["# label strain_pct median_eta core_mean_eta core_p99_eta shell_mean_eta "
              "frac_eta_gt_0.2 core_median_Fzz broken_SiO_bonds Si_broken Ca_cn_changed"]

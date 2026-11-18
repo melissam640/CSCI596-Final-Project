@@ -13,6 +13,9 @@
 #   cd /scratch1/mm18756/tobermolite/run1
 #   sbatch --job-name=tobe-equil    /home1/mm18756/tobermorite/slurm/run_pillar.slurm equil
 #   sbatch --job-name=tobe-compress /home1/mm18756/tobermorite/slurm/run_pillar.slurm compress
+# Finite pillar (perp/build_pillar.py --L ...), stages equil_finite / compress_finite:
+#   sbatch run_pillar.slurm equil_finite
+#   sbatch run_pillar.slurm compress_finite -var ends clamped -var R0 <R0>   (or -var ends wall)
 stage=${1:?usage: sbatch run_pillar.slurm equil|compress}
 
 module purge
@@ -29,6 +32,6 @@ srun $LMP -in /home1/mm18756/tobermorite/inputs/in.$stage -log log.$stage "${@:2
 dest=/home1/$USER/tobermorite/results/$(basename "$PWD")   # per run directory
 mkdir -p "$dest"
 cp log.$stage "$dest"/
-[ "$stage" = equil ]    && cp relaxed.data "$dest"/
-[ "$stage" = compress ] && cp species.out compressed.data "$dest"/
+[[ $stage == equil* ]]    && cp relaxed.data "$dest"/
+[[ $stage == compress* ]] && cp species.out compressed.data "$dest"/
 exit 0

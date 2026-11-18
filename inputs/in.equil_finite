@@ -1,0 +1,55 @@
+# Finite tobermorite-11A pillar (no periodic direction, boundary s s s): relaxation + thermalization
+# Built with perp/build_pillar.py --L ... . No NPT: both ends are free surfaces, so the axial
+# surface stress relaxes by itself. Produces relaxed.data, thermal.restart, traj_thermal.xyz.
+# Follow with in.compress_finite (-var ends clamped|wall).
+
+variable ffield index /home1/mm18756/tobermorite/info/ffield-CaSiOH-lammps.reax.txt
+variable T      index 10.0
+variable seed   index 482911
+variable nmin1  index 3000        # CG iterations (force evaluations capped at 2x)
+variable nber   index 20000       # 5 ps Berendsen T (drains relaxation heat)
+variable nnvt   index 40000       # 10 ps Nose-Hoover NVT
+variable ndump  index 2000        # 2000 x 0.25 fs = 0.5 ps
+
+units           real
+atom_style      charge
+boundary        s s s
+read_data       pillar.data
+
+pair_style      reaxff NULL checkqeq yes safezone 3.0 mincap 150
+pair_coeff      * * ${ffield} Ca Si O H
+fix             qeq all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff maxiter 400
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+# a cylinder leaves corner ranks near-empty; shift the cuts in all three directions
+balance         1.1 shift xyz 20 1.05
+
+thermo_style    custom step time temp pe etotal lx ly lz
+thermo_modify   flush yes
+
+# ---------------- Stage 1: structural relaxation ----------------
+thermo          50
+min_style       cg
+minimize        1.0e-10 1.0e-3 ${nmin1} $(2*v_nmin1)
+write_data      relaxed.data
+
+# ---------------- Stage 2: thermalize at T ----------------
+reset_timestep  0
+timestep        0.25
+thermo          200
+velocity        all create ${T} ${seed} mom yes rot yes dist gaussian
+fix             mom all momentum 100 linear 1 1 1 angular
+fix             bal all balance 2000 1.1 shift xyz 20 1.05
+dump            th all xyz ${ndump} traj_thermal.xyz
+dump_modify     th element Ca Si O H
+
+fix             nve all nve
+fix             tb all temp/berendsen ${T} ${T} 25.0
+run             ${nber}
+unfix           tb
+unfix           nve
+
+fix             nvt all nvt temp ${T} ${T} 100.0
+run             ${nnvt}
+write_restart   thermal.restart
