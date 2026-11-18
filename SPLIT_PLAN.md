@@ -91,6 +91,28 @@ also a flaw-based trigger, which the PRL argues is not needed.
    one **clamped** compress job. Account `anakano_429`. (No wall run; `-var ends wall` is still in
    `in.compress_finite` if a control is wanted later.)
 
+### Production steps (`/scratch1/mm18756/tobermorite/split_R60/`)
+
+| Step | Command (from the run dir) | Resources | Estimate | Check before next step |
+|---|---|---|---|---|
+| a. build | `sbatch --job-name=R60-build slurm/build_pillar.slurm --R 60 --L 240 --vac 40` | 1 core, 32 GB, 2 h | 20–40 min (x10: 12 min for 126k atoms) | `build.log`: N ≈ 225k, final charge 0, min distance ≳ 0.95 Å, **R0** |
+| b. equil | `sbatch --job-name=R60-equil --nodes=2 --ntasks=128 --ntasks-per-node=64 --time=16:00:00 slurm/run_pillar.slurm equil_finite` | 2×64 ranks | ≈ 7 h | CG ends on energy tolerance (x10 hit the evaluation cap), T = 10 K |
+| c. damp | `sbatch --job-name=R60-damp --dependency=afterok:<b> --nodes=2 --ntasks=128 --ntasks-per-node=64 --time=12:00:00 slurm/run_pillar.slurm damp_finite -var tdamp 800 -var ndamp 48000` | 2×64 ranks | ≈ 6 h | as in the pilot: length sd per ps ≲ 0.05 Å, the 1-ps mean lengths flat over the last few ps, T ≈ 10 K, PE flat. If it is still ringing, damp again before compressing |
+| d. compress | `sbatch --job-name=R60-clamped --nodes=2 --ntasks=128 --ntasks-per-node=64 --time=24:00:00 slurm/run_pillar.slurm compress_finite -var ends clamped -var R0 <R0>` | 2×64 ranks | ≈ 11 h; ~2.4 GB traj + ~1 GB stress dump | — |
+| e. analysis | `plot_compare.py`, `stress_map.py` (`--strains` around the peak), `damage_map.py --strain-per-frame 0.001 --core 30`, gauge strain | login node / debug | — | the hotspot criteria in the pilot takeaways below |
+
+- Steps b and c are submitted together (c depends on b with `afterok`). Step d is submitted only after
+  the damping check, because the pilot showed that a free pillar keeps ringing in its axial mode.
+- `run_pillar.slurm` now copies `thermal.restart` to `thermal_nvt.restart` before `damp_finite`
+  overwrites it (this was done by hand in the pilot).
+- Estimates are scaled from rot_penny_x10 (126k atoms, 128 ranks: about 0.2 s/step). In total that
+  is about 24 h of run time on 128 cores (≈ 3k core-hours) and at most 52 h requested.
+- Analysis memory: `damage_map.py` / `stress_map.py` on 225k atoms may be too heavy for the login
+  node. If so, run them in `salloc --partition=debug`.
+
+Log:
+- 2026-11-18: build submitted, job 14349668.
+
 ## Viewing in OVITO
 
 - `stress_<label>_<strain>.xyz`: color by `dsxx` (GPa). Add *Spatial binning* (2D, x–z, slab
