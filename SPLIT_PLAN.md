@@ -34,7 +34,7 @@ also a flaw-based trigger, which the PRL argues is not needed.
 | Penny crack | none | test the flaw-free, boundary-driven trigger |
 | Orientation | c ∥ x (layers vertical), axis = crystal a = z, `perp/` builder | the weak interlayer is parallel to the load, so σ_xx (normal to the layers) can open an axial split along it |
 | Geometry | finite cylinder, L/D = 2 (R = 60 Å, L = 240 Å, about 225k atoms) | standard specimen aspect ratio, near the k peak; large diameter for brittle cleavage |
-| Ends | rigid **clamped** grips (8 Å), plus a **frictionless-wall** control | clamped gives the hotspot; frictionless should remove it |
+| Ends | rigid **clamped** grips (8 Å) only | clamped gives the hotspot. A frictionless-wall control was run in the pilot but **dropped for production (2026-11-18)**, see below |
 | T, rate | 10 K, 1 %/ps (as before) | low T for brittleness; rate kept comparable with the earlier runs |
 | Force field | ReaxFF (Manzano 2012) | bond breaking, comparable with the earlier runs |
 
@@ -86,9 +86,10 @@ also a flaw-based trigger, which the PRL argues is not needed.
    Shortened equil, then 0.5 % of compression in each end mode.
 2. **Pilot** (R = 20, L = 80, full 25 %, clamped + wall, 32 ranks). Check that the hotspot appears in
    the clamped run only.
-3. **Production** (`split_R60/`, `split_R60_wall/`): `perp/build_pillar.py --R 60 --L 240 --vac 40`
-   (build on a compute node). One equil (2 nodes × 64 ranks), then `damp_finite` (`-var tdamp 800
-   -var ndamp 48000`), then two compress jobs from the same `thermal.restart`. Account `anakano_429`.
+3. **Production** (`split_R60/`): `perp/build_pillar.py --R 60 --L 240 --vac 40` (build on a compute
+   node). One equil (2 nodes × 64 ranks), then `damp_finite` (`-var tdamp 800 -var ndamp 48000`), then
+   one **clamped** compress job. Account `anakano_429`. (No wall run; `-var ends wall` is still in
+   `in.compress_finite` if a control is wanted later.)
 
 ## Viewing in OVITO
 
@@ -180,10 +181,18 @@ same family as the penny runs' band failure. There is no vertical gap along the 
 - With R = 20 Å, the pilot can't confirm or rule out the hotspot (noise ≳ predicted k). R60 has
   9× the cross-section and 3× the length, so it averages over about 25× more atoms per core bin. That
   should bring the noise below 1 %, but only if the wall control is fixed first.
-- Fix the wall control before production. The options are (a) a much stiffer wall (`-var Kw 1000`+) and
-  starting it at the end-face mean z instead of the outermost H, or (b) a short pre-contact stage that
-  lowers the wall until the load reaches ~0.1 GPa before the strain clock starts. Report both runs
-  against gauge strain as well as platen strain (add the gauge measurement to `stress_map.py` /
-  `damage_map.py`, or a small script).
+- **Decision (2026-11-18): drop the wall control and run only the clamped case at R60.** The pilot wall
+  run was contact-dominated (see 1). Fixing it would need a stiffer wall or a pre-contact stage.
+  Without the control, a hotspot in the clamped run must be judged against that run's own noise. Call
+  it real only if all of these hold:
+  - kcore_xx is positive and roughly constant over the pre-peak frames with σ_c ≥ 1 GPa (mean
+    clearly larger than the frame-to-frame sd), not swinging in sign as in the pilot;
+  - z_at, the height of the k_xx maximum, stays near mid-height, and the `sxx_xz.png` maps show one
+    coherent central tensile region;
+  - the size is above the `stress_map.py` synthetic noise floor for that atom count, and is
+    compared with the paper's k(L/B = 2, ν) using the clamped ν_x, ν_y.
+  If the result is ambiguous, rerun a wall control with a stiffer wall (`-var Kw 1000`+) placed at
+  the mean end-face height.
+- Also report gauge strain as well as platen strain (the grips make platen strain ≈ 0.8× gauge).
 - At R = 20 the shear-band mode wins in the clamped run before any splitting. Whether a larger
   diameter changes that is the actual question for R60 (Östlund / Yuan size effect).
