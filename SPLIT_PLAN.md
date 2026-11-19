@@ -1,6 +1,6 @@
 # Axial splitting of a finite, clamped tobermorite pillar (no penny crack)
 
-Status as of 2026-11-18 (pilot analysed; production not started). Follows `CRACK_PLAN.md` (penny-crack series).
+Status as of 2026-11-19 (pilot analysed; R60 built, equil + damp queued). Follows `CRACK_PLAN.md` (penny-crack series).
 
 ## Motivation
 
@@ -112,6 +112,9 @@ also a flaw-based trigger, which the PRL argues is not needed.
 
 Log:
 - 2026-11-18: build job 14349668 failed in 1 s (no `/usr/bin/time` on compute nodes; the exit code was hidden by `| tee`). Fixed (bash `time` + `pipefail`) and resubmitted as job 14349715.
+- 2026-11-19: build 14349715 OK (12 m 53 s, 685 MB max RSS). N = 228401 (Ca 20425, Si 30606, O 113548,
+  H 63822), 2138 H added, final charge 0, r_max = 62.26 Å, z −121.94 … 122.28 Å, min distance 0.970 Å.
+  **R0 = 60.34 Å.** Submitted equil 14385735 and damp 14385736 (`afterok`).
 
 ## Viewing in OVITO
 
