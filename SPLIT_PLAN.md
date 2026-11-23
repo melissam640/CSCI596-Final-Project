@@ -1,6 +1,6 @@
 # Axial splitting of a finite, clamped tobermorite pillar (no penny crack)
 
-Status as of 2026-11-19 (pilot analysed; R60 built, equil + damp queued). Follows `CRACK_PLAN.md` (penny-crack series).
+Status as of 2026-11-22 (pilot analysed; R60 equil + damp done, clamped compress 14471684 submitted). Follows `CRACK_PLAN.md` (penny-crack series).
 
 ## Motivation
 
@@ -115,6 +115,16 @@ Log:
 - 2026-11-19: build 14349715 OK (12 m 53 s, 685 MB max RSS). N = 228401 (Ca 20425, Si 30606, O 113548,
   H 63822), 2138 H added, final charge 0, r_max = 62.26 Å, z −121.94 … 122.28 Å, min distance 0.970 Å.
   **R0 = 60.34 Å.** Submitted equil 14385735 and damp 14385736 (`afterok`).
+- 2026-11-22: equil 14385735 (5 h 02 m) and damp 14385736 (4 h 49 m) both COMPLETED. MD speed
+  0.29 s/step on 128 ranks (plan assumed 0.2), so compress ≈ 102k steps → 8–10 h.
+  - Equil: CG 1344 steps, stopped on **energy tolerance**. NVT T = 10.0 ± 0.3 K. Length 242.8 → ~234 Å,
+    still **ringing** at the end: 1-ps mean Lz swung 230.8–237.9 Å (±1.5 %), period ≈ 10 ps, as predicted.
+  - Damp: ringing removed. 1-ps mean Lz 233.63 → 233.99 Å over 2–14.5 ps (slow creep of +0.15 % in the
+    Langevin stage), 233.83–233.99 Å over the last 9.5 ps. sd per ps 0.02–0.09 Å, except 0.16 Å in the
+    last ps, which is one shrink-wrap jump at the final reneighbor (Lz only updates at reneighbor and
+    tracks the outermost end-face H; 0.47 Å in 0.3 ps cannot be the 10-ps mode). T = 10.00 ± 0.02 K,
+    PE flat (−25 kcal/mol over the last 2.5 ps). Lx, Ly 118.1, 119.2 Å. Check passed.
+  - Submitted clamped compress **14471684** (`-var ends clamped -var R0 60.34`, 2×64 ranks, 24 h).
 
 ## Viewing in OVITO
 
