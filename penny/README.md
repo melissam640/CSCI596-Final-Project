@@ -11,7 +11,7 @@ Ca-sheet penny a = 21.5 Å), built 2026-11-12. See `CRACK_PLAN.md`, section "rot
 | `build.log` | output of the original build (731 s) |
 | `pillar.data`, `pillar0.xyz` | the built pillar (LAMMPS data, atom_style charge; XYZ for viewing) |
 
-Rebuild (writes `pillar.data` and `pillar0.xyz` into `--out`; ~12 min, several GB, use a compute node):
+Rebuild (writes `pillar.data` and `pillar0.xyz` into `--out`; ~12–14 min, ~1 GB peak memory, use a compute node):
 
     python build_pillar.py --R 43.0 --nc 9 --vac 40 --crack-a 21.5 --crack-h 4 --out <dir>
 
