@@ -1,6 +1,7 @@
 # Axial splitting of a finite, clamped tobermorite pillar (no penny crack)
 
-Status as of 2026-11-22 (pilot analysed; R60 equil + damp done, clamped compress 14471684 submitted). Follows `CRACK_PLAN.md` (penny-crack series).
+Status as of 2026-11-24 (pilot and R60 clamped production analysed: R60 fails by a crush band under the
+top grip, no axial split, hotspot ambiguous; the run was not quasi-static, see R60 results). Follows `CRACK_PLAN.md` (penny-crack series).
 
 ## Motivation
 
@@ -125,6 +126,20 @@ Log:
     tracks the outermost end-face H; 0.47 Å in 0.3 ps cannot be the 10-ps mode). T = 10.00 ± 0.02 K,
     PE flat (−25 kcal/mol over the last 2.5 ps). Lx, Ly 118.1, 119.2 Å. Check passed.
   - Submitted clamped compress **14471684** (`-var ends clamped -var R0 60.34`, 2×64 ranks, 24 h).
+- 2026-11-24: compress 14471684 COMPLETED (9 h 18 m, 3.0 steps/s, full 25 %). Peak 19.4 GPa at 17.0 %
+  platen strain (pilot 19.6 GPa at 14.6 %), then a **plateau at ≈ 19 GPa to 25 %** with no post-peak drop
+  (the pilot fell to 12 GPa). E₀ ≈ 46 GPa. Middle T ≈ 14 K before the peak, 21–23 K after it (pilot ≈ 9 K).
+  Plot `results/compare_split_R60.png`, curve `results/stress_strain_split_R60_clamped.dat`.
+  **Not quasi-static.** The inputs are identical to the pilot except for size, but at the same strain rate
+  the platen moves 3× faster (0.23 vs 0.08 Å/ps) and the stress wave takes 3× longer to cross the pillar.
+  The bottom platen feels nothing until ≈ 3–4 % strain (pilot ≈ 1 %). After that the top platen carries
+  ≈ 6.5 GPa more than the bottom up to the peak (pilot ≤ 1 GPa once both platens are loaded). For example,
+  at 10 % the top carries 15.1 GPa and the bottom 8.6 GPa. After the peak the top keeps rising (20.6 → 22.3
+  GPa) while the bottom falls (17.7 → 15.7). The reported ½(F_top − F_bot) is therefore an average over a
+  non-uniform pillar.
+  Maps on a compute node: `slurm/analyse_split.slurm` (stress_map, damage_map `--core 30`, new
+  `scripts/gauge_strain.py`), job **14753336**: COMPLETED in 25 m 39 s, 3.7 GB max RSS (damage_map 25 min,
+  stress_map 1 min, gauge 22 s). Results below.
 
 ## Viewing in OVITO
 
@@ -231,3 +246,82 @@ same family as the penny runs' band failure. There is no vertical gap along the 
 - Also report gauge strain as well as platen strain (the grips make platen strain ≈ 0.8× gauge).
 - At R = 20 the shear-band mode wins in the clamped run before any splitting. Whether a larger
   diameter changes that is the actual question for R60 (Östlund / Yuan size effect).
+
+### Production R60 (`split_R60/`, R = 60, L = 240, 228 401 atoms, R0 = 60.34 Å, 2026-11-24)
+
+Compress job 14471684 (clamped, 9 h 18 m on 128 ranks); analysis job 14753336 (`slurm/analyse_split.slurm`).
+Plots: `results/compare_split_R60.png`, `results/stress_strain_clamped_R60.png`,
+`results/k_vs_strain_split_R60.png`. Curves: `results/stress_strain_split_R60_clamped.dat`,
+`results/gauge_split_R60_clamped.dat` (platen strain, gauge strain, mid-height bulge).
+Maps (untracked): `results/stress_split_R60/`, `results/damage_split_R60/`.
+
+| Run | Peak (GPa) | Platen strain at peak | Gauge strain at peak | After peak |
+|---|---|---|---|---|
+| R20 pilot | 19.6 | 14.6 % | ≈ 18 % | drops to 12.0 GPa by 20 % |
+| R60 | 19.4 | 17.0 % | 16.3 % | plateau 18.9–19.2 GPa to 25 % |
+
+**1. The loading was not quasi-static, and the top end was loaded harder.** Same inputs as the pilot,
+but at 1 %/ps the platen moves 3× faster (0.23 Å/ps) and the stress wave needs ≈ 3–4 ps to cross 234 Å.
+- Platen stresses (top / bottom, GPa): 3.9 / 0.0 at 1 %, 6.3 / 0.1 at 3 %, 15.1 / 8.6 at 10 %,
+  21.5 / 16.1 at 15 %, 20.6 / 17.7 at 17 %, 22.3 / 15.7 at 25 %. The top carries ≈ 6.5 GPa more than the
+  bottom up to the peak (pilot: ≤ 1 GPa once both platens are loaded). The flat post-peak curve is the
+  average of a still-rising top and a falling bottom.
+- The mid-height σ_c from `stress_map.py` peaks at only 14.9 GPa (16 %) against 19.4 GPa at the platens.
+- The grips were not equal either. Both are 8 Å from the *outermost* atom, but the top end face is
+  rougher, so the top grip held 3548 atoms (45 % of a solid 8 Å slab, 7821) and the bottom 5608 (72 %).
+  Pilot: 652 (72 %) / 780 (86 %).
+- Middle-group T ≈ 14 K before the peak and 21–23 K after it (pilot ≈ 9 K, with a short 24 K spike at
+  failure), i.e. continuous dissipation rather than one failure event.
+
+**2. Failure: a horizontal crush band under the top grip, not an axial split.** (`shear_slices.png`)
+- A full-width band of high η forms at z ≈ 200 Å, ≈ 25–30 Å below the top grip, at 16 % and is
+  complete by 17–18 %. By 25 % the top section is crushed and flared, and a weaker second band
+  appears at z ≈ 85 Å. The side surfaces carry high η from ≈ 14 %.
+- No vertical gap along the layers. `stress_map.py` finds no opened bins until 24 % (1 → 18 → 41 bins
+  at 24–25 %, in the crushed top).
+- Bond damage starts slightly **before** the peak, unlike the pilot: broken Si–O 0 / 4 / 23 / 47 / 96 /
+  259 / 974 at 10 / 14 / 16 / 17 / 18 / 20 / 25 %. Ca–O coordination changes 173 → 1498.
+- Gauge strain tracks the platen strain up to the peak (10.7 % at 10 %, 16.3 % at 17 %; pilot ≈ 1.27×),
+  then grows more slowly (20.8 % at 25 %), because the deformation goes into the band above the gauge
+  section. The mid-height bulge peaks at 5.5 % (16 %) and then falls to 4.5 %: the middle partly unloads.
+- The location fits point 1: the end that carried more load and was gripped through less material
+  failed first.
+
+**3. Transverse-tension hotspot: ambiguous.** kcore mean ± sd over frames with σ_c ≥ 1 GPa:
+
+| platen strain | σ_c (GPa) | kcore_xx (%) | kcore_yy (%) | z_at of kcore_xx (Å from mid) |
+|---|---|---|---|---|
+| 3–8 % | 2.0–6.5 | 8.0 ± 5.4 | 2.0 ± 2.3 | −29 … +61 |
+| 8–14 % | 6.5–13.5 | 4.4 ± 0.5 | 3.4 ± 1.1 | −50 … +54 |
+| 14.5–17 % | 14.1–14.9 | 7.6 ± 1.6 | 9.3 ± 1.3 | +42 … +56 |
+| 17.5–25 % | 13.5–14.6 | 15.5 ± 2.3 | 15.9 ± 3.6 | +22 … +43 |
+
+Against the clamped-only criteria above:
+- *Positive and steady before the peak:* **passes** at 8–14 % (4.4 ± 0.5 %, much steadier than the
+  pilot's −1.4 ± 1.8 %). The 3–8 % frames are noisy because σ_c is small and the pillar is still filling
+  with load.
+- *Near mid-height, one coherent central region:* **partly.** The `sxx_xz.png` maps from 14 % on show a
+  broad tensile middle between compressive zones at both grips, but the kcore_xx maximum wanders over
+  ±50 Å and sits above mid-height (+35 … +55 Å), towards the top band, from 14.5 % on.
+- *Above the noise and compared with k(L/B = 2, ν):* **fails.** kcore_yy (along the layers) is nearly as
+  large (3.4 ± 1.1 %), so the tension is not specific to the direction across the layers. 4.4 % is 2–4×
+  the paper's ≈ 1–2 %. The synthetic noise floor was only measured for 9k atoms, not 228k. Apparent ν
+  (at ≤ 2 %) is meaningless here, because the bottom was not yet loaded (ν_x 0.03, ν_y 0.05). At
+  8–14 % the running values are ν_x ≈ 0.13–0.15, ν_y ≈ 0.59 (pilot 0.19 / 0.49).
+- After the peak k grows to 10–19 % in both directions. That is the crush band and bulging, not the
+  hotspot.
+
+**Takeaways.**
+- R60 does not show axial splitting at 1 %/ps. It fails at the more heavily loaded, less firmly gripped
+  top end. Whether that is a size effect or a loading artifact cannot be separated in this run.
+- The modest transverse tension in the middle (≈ 4 % of σ_c) is about the same across and along the
+  layers, so it does not confirm the boundary-induced hotspot.
+- Before drawing conclusions about size, rerun R60 **quasi-statically**:
+  - `-var erate -3.3e-6` (0.33 %/ps, the pilot's platen speed of 0.08 Å/ps). That is ≈ 300k steps for
+    25 %, ≈ 28 h on 128 ranks: needs `oneweek` or a restart split across jobs. Stopping at ≈ 20 %
+    saves a fifth.
+  - Grips measured from the mean end-face height (not the outermost atom), so both clamp the same
+    amount of solid.
+  - Check before trusting the curve: top and bottom platen stresses within ≈ 1 GPa once both are loaded.
+- If the hotspot is still ambiguous after that, the plan's fallback stands: a wall control with a stiffer
+  wall (`-var Kw 1000`+) placed at the mean end-face height.
