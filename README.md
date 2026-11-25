@@ -189,7 +189,7 @@ in §7.
   −1.366 e). Ca next to water O (< 2.9 Å) is typed `ca2` (interlayer), and all other Ca `cao`.
 - To compare force fields on identical atoms, always build the ClayFF data from the
   ReaxFF `pillar.data`, as in §4.
-- **Finite (non-periodic) pillars between platens**: `perp/build_pillar.py --R .. --L ..`
+- **Finite (non-periodic) pillars between platens**: `clamped/build_pillar.py --R .. --L ..`
   (c ∥ x orientation), then `inputs/in.equil_finite` and `inputs/in.compress_finite`
   (`-var ends clamped|wall -var R0 ..`, `boundary s s s`), analysed with `scripts/stress_map.py`.
   Motivation, settings and results are in `SPLIT_PLAN.md`.

@@ -13,7 +13,7 @@
 #   cd /scratch1/mm18756/tobermolite/run1
 #   sbatch --job-name=tobe-equil    /home1/mm18756/tobermorite/slurm/run_pillar.slurm equil
 #   sbatch --job-name=tobe-compress /home1/mm18756/tobermorite/slurm/run_pillar.slurm compress
-# Finite pillar (perp/build_pillar.py --L ...), stages equil_finite / compress_finite:
+# Finite pillar (clamped/build_pillar.py --L ...), stages equil_finite / compress_finite:
 #   sbatch run_pillar.slurm equil_finite
 #   sbatch run_pillar.slurm compress_finite -var ends clamped -var R0 <R0>   (or -var ends wall)
 stage=${1:?usage: sbatch run_pillar.slurm equil|compress}

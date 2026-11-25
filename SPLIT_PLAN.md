@@ -32,7 +32,7 @@ also a flaw-based trigger, which the PRL argues is not needed.
 | Choice | Value | Reason |
 |---|---|---|
 | Penny crack | none | test the flaw-free, boundary-driven trigger |
-| Orientation | c ∥ x (layers vertical), axis = crystal a = z, `perp/` builder | the weak interlayer is parallel to the load, so σ_xx (normal to the layers) can open an axial split along it |
+| Orientation | c ∥ x (layers vertical), axis = crystal a = z, `clamped/` builder | the weak interlayer is parallel to the load, so σ_xx (normal to the layers) can open an axial split along it |
 | Geometry | finite cylinder, L/D = 2 (R = 60 Å, L = 240 Å, about 225k atoms) | standard specimen aspect ratio, near the k peak; large diameter for brittle cleavage |
 | Ends | rigid **clamped** grips (8 Å) only | clamped gives the hotspot. A frictionless-wall control was run in the pilot but **dropped for production (2026-11-18)**, see below |
 | T, rate | 10 K, 1 %/ps (as before) | low T for brittleness; rate kept comparable with the earlier runs |
@@ -40,7 +40,7 @@ also a flaw-based trigger, which the PRL argues is not needed.
 
 ## Code changes
 
-- `perp/build_pillar.py --L <Å>`: finite (non-periodic) pillar. Whole units are kept with r < R and
+- `clamped/build_pillar.py --L <Å>`: finite (non-periodic) pillar. Whole units are kept with r < R and
   |z| < L/2. The charge balance protonates the outermost non-bridging O by **depth to the nearest free
   surface** (side or end face), and end-face H point along ±z. `pillar.data` has a z box of
   [0, L + 2·vac] and is meant for `boundary s s s`. `min_dist` now uses a numpy cell list (scipy is
@@ -86,7 +86,7 @@ also a flaw-based trigger, which the PRL argues is not needed.
    Shortened equil, then 0.5 % of compression in each end mode.
 2. **Pilot** (R = 20, L = 80, full 25 %, clamped + wall, 32 ranks). Check that the hotspot appears in
    the clamped run only.
-3. **Production** (`split_R60/`): `perp/build_pillar.py --R 60 --L 240 --vac 40` (build on a compute
+3. **Production** (`split_R60/`): `clamped/build_pillar.py --R 60 --L 240 --vac 40` (build on a compute
    node). One equil (2 nodes × 64 ranks), then `damp_finite` (`-var tdamp 800 -var ndamp 48000`), then
    one **clamped** compress job. Account `anakano_429`. (No wall run; `-var ends wall` is still in
    `in.compress_finite` if a control is wanted later.)

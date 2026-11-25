@@ -1,5 +1,5 @@
 # Finite tobermorite-11A pillar (no periodic direction, boundary s s s): relaxation + thermalization
-# Built with perp/build_pillar.py --L ... . No NPT: both ends are free surfaces, so the axial
+# Built with clamped/build_pillar.py --L ... . No NPT: both ends are free surfaces, so the axial
 # surface stress relaxes by itself. Produces relaxed.data, thermal.restart, traj_thermal.xyz.
 # Follow with in.compress_finite (-var ends clamped|wall).
 

@@ -7,7 +7,7 @@ R_y(+90): (x, y, z) -> (z, y, -x).  Lattice rows a, b, c become
   c' = (|c|, 0, 0), b' = (0, b_y, -b_x), a' = (0, 0, -|a|).
 The rotated cell is written with rows [c', b', -a'], so the third (periodic, pillar-axis)
 vector is +z and of length |a|.  The layers (normal c) are now perpendicular to x.
-Writes extended XYZ (species + positions) readable by perp/build_pillar.py and OVITO.
+Writes extended XYZ (species + positions) readable by clamped/build_pillar.py and OVITO.
 """
 import argparse
 import os

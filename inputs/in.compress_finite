@@ -4,7 +4,7 @@
 #            rigidly with no lateral motion = the "clamped platen" of Khodadad et al. (PRL 2026)
 #   wall     two frictionless planar walls (fix indent plane): the ends can slide laterally
 #            (control; boundary-induced transverse tension should vanish)
-# Required: -var R0 <A> (bulk-density equivalent radius printed by perp/build_pillar.py).
+# Required: -var R0 <A> (bulk-density equivalent radius printed by clamped/build_pillar.py).
 # Stage A (hold, nhold steps, no load) gives the reference time-averaged per-atom stress.
 # Stage B (load): dumps traj_compress.lammpstrj every ndump steps (frame k = k x 0.1 % strain)
 # and stress_compress.lammpstrj every nsdump steps (per-atom stress x volume, atm*A^3,

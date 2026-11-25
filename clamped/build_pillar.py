@@ -5,7 +5,7 @@ Usage: python build_pillar.py [--R 20.0] [--nc 4] [--vac 40] [--out DIR] [--dry]
        [--crack-a 10 --crack-h 4 [--crack-tilt 90 --crack-az 0 --crack-zc 0.5]]
        python build_pillar.py --R 60 --L 240 [--vac 40]      # finite pillar (boundary s s s)
 
-Reads the rotated bulk cell written by perp/rotate_cell.py (rows c' = x, b' in yz, a' = +z).
+Reads the rotated bulk cell written by clamped/rotate_cell.py (rows c' = x, b' in yz, a' = +z).
 The pillar axis is crystal a (periodic length nc*|a|), the layers are perpendicular to x.
 The axis is placed on the Ca-sheet midplane nearest the cell centre (in x), so a penny crack
 with its normal along x (tilt 90, az 0, the defaults) lies in that Ca sheet.
