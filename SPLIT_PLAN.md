@@ -59,6 +59,10 @@ also a flaw-based trigger, which the PRL argues is not needed.
     σ = F/(πR0²) in GPa, strain = platen displacement / L0. (Was ½(|F_top| + |F_bot|) until the
     debug run showed this hides tension; fixed 2026-11-17.)
     Thermo columns: `v_strain v_ftop v_fbot v_scomp`.
+  - Optional `-var gbot <z> -var gtop <z>` (added 2026-11-24): grip planes in box z, overriding the
+    `grip` depth from the outermost atom. `scripts/grip_planes.py <dump>` computes "equal-solid" planes,
+    where each grip holds the atoms of a solid `grip`-thick slab ((N/L)·grip), so a rough end face
+    no longer under-fills its grip. The log prints the planes and the group sizes.
   - Stage A: an `nhold` = 2000-step hold with no load, which gives the reference stress. Stage B:
     `ncomp` = 100000 steps (25 %).
   - Dumps: `traj_compress.lammpstrj` every 400 steps (0.1 %), for η. `stress_compress.lammpstrj`
@@ -131,7 +135,7 @@ Log:
   (the pilot fell to 12 GPa). E₀ ≈ 46 GPa. Middle T ≈ 14 K before the peak, 21–23 K after it (pilot ≈ 9 K).
   Plot `results/compare_split_R60.png`, curve `results/stress_strain_split_R60_clamped.dat`.
   **Not quasi-static.** The inputs are identical to the pilot except for size, but at the same strain rate
-  the platen moves 3× faster (0.23 vs 0.08 Å/ps) and the stress wave takes 3× longer to cross the pillar.
+  the platen moves 3× faster (2.34 vs 0.80 Å/ps) and the stress wave takes 3× longer to cross the pillar.
   The bottom platen feels nothing until ≈ 3–4 % strain (pilot ≈ 1 %). After that the top platen carries
   ≈ 6.5 GPa more than the bottom up to the peak (pilot ≤ 1 GPa once both platens are loaded). For example,
   at 10 % the top carries 15.1 GPa and the bottom 8.6 GPa. After the peak the top keeps rising (20.6 → 22.3
@@ -140,6 +144,18 @@ Log:
   Maps on a compute node: `slurm/analyse_split.slurm` (stress_map, damage_map `--core 30`, new
   `scripts/gauge_strain.py`), job **14753336**: COMPLETED in 25 m 39 s, 3.7 GB max RSS (damage_map 25 min,
   stress_map 1 min, gauge 22 s). Results below.
+- 2026-11-24: **quasi-static rerun** (`split_R60_qs/`, from the same damped `thermal.restart`).
+  - Equal-solid grips from frame 0 of the first run: `-var gbot 54.3949 -var gtop 265.4075` (10.25 / 12.36 Å
+    deep; 7822 / 7826 atoms vs 5608 / 3548 before).
+  - `-var erate -3.33333e-6` (0.33 %/ps): platen 0.78 Å/ps (pilot 0.80). `ncomp 300000` (25 %),
+    `ndump 1200` / `nsdump 6000`, so frames stay at 0.1 % / 0.5 % and the analysis defaults still apply.
+  - Debug test 14768529 (20 ranks, 200 + 200 steps): both stages ran, the grips were as above, and both
+    dumps were written.
+  - Submitted **14771209**: `sbatch --job-name=R60qs-clamped --nodes=2 --ntasks=128 --ntasks-per-node=64
+    --time=40:00:00 slurm/run_pillar.slurm compress_finite -var ends clamped -var R0 60.34 -var gbot 54.3949
+    -var gtop 265.4075 -var erate -3.33333e-6 -var ncomp 300000 -var ndump 1200 -var nsdump 6000`.
+    Expected ≈ 27–28 h at 3.0 steps/s.
+  - Check first: top and bottom platen stresses within ≈ 1 GPa once both are loaded.
 
 ## Viewing in OVITO
 
@@ -261,7 +277,7 @@ Maps (untracked): `results/stress_split_R60/`, `results/damage_split_R60/`.
 | R60 | 19.4 | 17.0 % | 16.3 % | plateau 18.9–19.2 GPa to 25 % |
 
 **1. The loading was not quasi-static, and the top end was loaded harder.** Same inputs as the pilot,
-but at 1 %/ps the platen moves 3× faster (0.23 Å/ps) and the stress wave needs ≈ 3–4 ps to cross 234 Å.
+but at 1 %/ps the platen moves 3× faster (2.34 Å/ps; pilot 0.80) and the stress wave needs ≈ 3–4 ps to cross 234 Å.
 - Platen stresses (top / bottom, GPa): 3.9 / 0.0 at 1 %, 6.3 / 0.1 at 3 %, 15.1 / 8.6 at 10 %,
   21.5 / 16.1 at 15 %, 20.6 / 17.7 at 17 %, 22.3 / 15.7 at 25 %. The top carries ≈ 6.5 GPa more than the
   bottom up to the peak (pilot: ≤ 1 GPa once both platens are loaded). The flat post-peak curve is the
@@ -317,7 +333,7 @@ Against the clamped-only criteria above:
 - The modest transverse tension in the middle (≈ 4 % of σ_c) is about the same across and along the
   layers, so it does not confirm the boundary-induced hotspot.
 - Before drawing conclusions about size, rerun R60 **quasi-statically**:
-  - `-var erate -3.3e-6` (0.33 %/ps, the pilot's platen speed of 0.08 Å/ps). That is ≈ 300k steps for
+  - `-var erate -3.3e-6` (0.33 %/ps, the pilot's platen speed of 0.80 Å/ps). That is ≈ 300k steps for
     25 %, ≈ 28 h on 128 ranks: needs `oneweek` or a restart split across jobs. Stopping at ≈ 20 %
     saves a fifth.
   - Grips measured from the mean end-face height (not the outermost atom), so both clamp the same

@@ -16,7 +16,9 @@ variable T      index 10.0
 variable ncomp  index 100000      # 25 ps -> 25 % strain
 variable erate  index -1.0e-5     # 1/fs (= -1 %/ps, engineering, relative to L0)
 variable R0     index 0.0         # REQUIRED: -var R0 ...
-variable grip   index 8.0         # grip thickness (A), clamped mode
+variable grip   index 8.0         # grip thickness (A) from the outermost atom, clamped mode
+variable gbot   index 0.0         # if > 0: bottom grip = atoms with z < gbot (box z, A); overrides grip
+variable gtop   index 0.0         # if > 0: top grip = atoms with z > gtop (scripts/grip_planes.py)
 variable Kw     index 100.0       # wall stiffness (kcal/mol/A^3), wall mode
 variable nhold  index 2000        # 0.5 ps unloaded hold
 variable ndump  index 400         # 100 fs = 0.1 % strain
@@ -45,9 +47,12 @@ print           "pillar z ${zlo0} .. ${zhi0}, L0 = ${L0} A, platen velocity ${vz
 # load -> engineering stress: 1 kcal/mol/A = 0.0694786 nN; 1 nN/A^2 = 100 GPa
 variable        f2gpa equal 6.94786/(PI*v_R0^2)
 
+if "${gtop} <= 0.0" then "variable ztg equal $(v_zhi0-v_grip)" else "variable ztg equal ${gtop}"
+if "${gbot} <= 0.0" then "variable zbg equal $(v_zlo0+v_grip)" else "variable zbg equal ${gbot}"
 if "${ends} == clamped" then &
-  "region rtop block INF INF INF INF $(v_zhi0-v_grip) INF units box" &
-  "region rbot block INF INF INF INF INF $(v_zlo0+v_grip) units box" &
+  "print 'grip planes: bottom z < $(v_zbg) ($(v_zbg-v_zlo0) A deep), top z > $(v_ztg) ($(v_zhi0-v_ztg) A deep)'" &
+  "region rtop block INF INF INF INF ${ztg} INF units box" &
+  "region rbot block INF INF INF INF INF ${zbg} units box" &
   "group top region rtop" &
   "group bot region rbot" &
   "group mid subtract all top bot" &
