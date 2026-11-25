@@ -1,0 +1,7 @@
+Ca-sheet midplanes in cell x (A): 5.91 17.63; pillar axis at x = 5.91 A (cell centre 11.71); nearest Si planes -2.16 / +2.14 A
+R=43.0 Lz=252.0900 N=125917 Ca10811 H35834 O62424 Si16848
+formal charge before balance=-2354, H added=2354, final=0, r_max=45.27
+R0 (bulk-density equivalent radius, pass as -var R0) = 43.72 A
+penny crack a=21.5 h=4.0 tilt=90.0 az=0.0 zc=0.5: 133 atoms removed (Ca133 Si0 O0 H0)
+min interatomic distance=0.970 A
+exit=0 731s
