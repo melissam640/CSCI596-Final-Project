@@ -10,7 +10,8 @@ internal flaw, a penny crack, and clamping the ends of the pillar to create
 sideways tension.
 
 <div align="center">
-<img src="./images/compression-test-ex.png" alt="compression test example" width="30%" style="display: block;">
+<img src="./images/compression-test-ex.png" alt="compression test example" width="30%">
+<br/>
 <sub><b>Figure 1:</b> Concrete compression test example.</sub>
 </div>
 <br/>
@@ -48,7 +49,7 @@ to show brittle axial splitting.
 <br/>
 
 <div align="center">
-<img src="./results/damage_rot_penny_x10/shear_slices.png" alt="penny crack damage map" width="100%">
+<img src="./images/shear_slices_R43.png" alt="penny crack damage map" width="100%">
 <br/>
 <sub>
     <b>Figure 4:</b> Damage map for tobermorite pillar with penny crack. Sheer 
@@ -112,7 +113,7 @@ information on the clamped pillar tests.
 <br/>
 
 <div align="center">
-<img src="./results/damage_split_R60/shear_slices.png" alt="clamped large pillar video" width="100%">
+<img src="./images/shear_slices_R60.png" alt="clamped large pillar video" width="100%">
 <br/>
 <sub>
     <b>Figure 9:</b> Damage map for 228,401 atoms tobermorite pillar with 
