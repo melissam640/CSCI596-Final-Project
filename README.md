@@ -28,7 +28,8 @@ testing a x10 smaller pillar. The second method attempted to modify the design
 to show brittle axial splitting.
 
 <div align="center">
-<img src="./images/penny.gif" alt="penny crack video" width="50%" style="display: block;">
+<img src="./images/penny.gif" alt="penny crack video" width="50%">
+<br/>
 <sub>
     <b>Figure 2:</b> Compression of tobermorite pillar with penny crack. Ca, 
     Si, O, and H are shown in green, beige, red, and white respectively.
@@ -37,8 +38,9 @@ to show brittle axial splitting.
 <br/>
 
 <div align="center">
-<img src="./results/stress_strain_penny_R43.png" alt="penny crack stress-strain" width="50%" style="display: block;">
-<sub>
+<img src="./results/stress_strain_penny_R43.png" alt="penny crack stress-strain" width="50%">
+<br/>
+    <sub>
     <b>Figure 3:</b> Stress-strain graph for tobermorite pillar with penny 
     crack. Peak 20.6 GPa at 19.3% strain.
 </sub>
@@ -46,7 +48,8 @@ to show brittle axial splitting.
 <br/>
 
 <div align="center">
-<img src="./results/damage_rot_penny_x10/shear_slices.png" alt="penny crack damage map" width="100%" style="display: block;">
+<img src="./results/damage_rot_penny_x10/shear_slices.png" alt="penny crack damage map" width="100%">
+<br/>
 <sub>
     <b>Figure 4:</b> Damage map for tobermorite pillar with penny crack. Sheer 
     concentrates around the penny crack, forming a horizontal band after peak 
@@ -67,7 +70,8 @@ is about x25 the size of the smaller pillar. See `SPLIT_PLAN.md` for more
 information on the clamped pillar tests.
 
 <div align="center">
-<img src="./images/clamped_R20.gif" alt="clamped small pillar video" width="50%" style="display: block;">
+<img src="./images/clamped_R20.gif" alt="clamped small pillar video" width="50%">
+<br/>
 <sub>
     <b>Figure 5:</b> Compression of 8,969 atoms tobermorite pillar with clamped 
     ends. Ca, Si, O, and H are shown in green, beige, red, and white 
@@ -77,7 +81,8 @@ information on the clamped pillar tests.
 <br/>
 
 <div align="center">
-<img src="./results/stress_strain_clamped_R20.png" alt="clamped small pillar stress-strain" width="50%" style="display: block;">
+<img src="./results/stress_strain_clamped_R20.png" alt="clamped small pillar stress-strain" width="50%">
+<br/>
 <sub>
     <b>Figure 6:</b> Stress-strain graph for 8,969 atoms tobermorite pillar 
     with clamped ends.
@@ -86,7 +91,8 @@ information on the clamped pillar tests.
 <br/>
 
 <div align="center">
-<img src="./images/clamped_R60.gif" alt="clamped large pillar video" width="50%" style="display: block;">
+<img src="./images/clamped_R60.gif" alt="clamped large pillar video" width="50%">
+<br/>
 <sub>
     <b>Figure 7:</b> (Left side) Compression of 228,401 atoms tobermorite 
     pillar with clamped ends. Ca, Si, O, and H are shown in green, beige, red, 
@@ -96,7 +102,8 @@ information on the clamped pillar tests.
 <br/>
 
 <div align="center">
-<img src="./results/stress_strain_clamped_R60.png" alt="clamped large pillar video" width="50%" style="display: block;">
+<img src="./results/stress_strain_clamped_R60.png" alt="clamped large pillar video" width="50%">
+<br/>
 <sub>
     <b>Figure 8:</b> Stress-strain graph for 228,401 atoms tobermorite pillar 
     with clamped ends.
@@ -105,7 +112,8 @@ information on the clamped pillar tests.
 <br/>
 
 <div align="center">
-<img src="./results/damage_split_R60/shear_slices.png" alt="clamped large pillar video" width="100%" style="display: block;">
+<img src="./results/damage_split_R60/shear_slices.png" alt="clamped large pillar video" width="100%">
+<br/>
 <sub>
     <b>Figure 9:</b> Damage map for 228,401 atoms tobermorite pillar with 
     clamped ends.
